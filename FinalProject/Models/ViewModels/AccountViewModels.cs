@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 //TODO: Change this namespace to match your project
-namespace fa22RelationalDataDemo.Models
+namespace FinalProject.Models
 {
     //NOTE: This is the view model used to allow the user to login
     //The user only needs teh email and password to login
