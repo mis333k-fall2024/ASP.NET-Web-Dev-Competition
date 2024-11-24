@@ -1,359 +1,219 @@
-﻿using fa22RelationalDataDemo.DAL;
-using fa22RelationalDataDemo.Models;
-using fa22RelationalDataDemo.Utilities;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using FinalProject.Models;
+using FinalProject.DAL;
+using System.Security.Claims;
+using System.Text.Json;
 
-
-namespace fa22RelationalDataDemo.Controllers
+namespace FinalProject.Controllers
 {
-    //only logged-in users can access registrations
-    //kind of like orders in your HW4
-    [Authorize]
-    public class RegistrationsController : Controller
+    public class ReservationController : Controller
     {
         private readonly AppDbContext _context;
-        private readonly UserManager<AppUser> _userManager;
+        private const Int32 FIRST_CONFIRMATION_NUMBER = 21901;
 
-        public RegistrationsController(AppDbContext context, UserManager<AppUser> userManger)
+        public ReservationController(AppDbContext context)
         {
             _context = context;
-            _userManager = userManger;
         }
 
-        // GET: Registrations
-        public IActionResult Index()
+        // GET: Reservations - Show user's reservations
+        [Authorize]
+        public async Task<IActionResult> Index()
         {
-            //Set up a list of registrations to display
-            List<Registration> registrations;
+            string userId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-            //User.IsInRole -- they see ALL registrations and detail
-            if (User.IsInRole("Admin"))
-            {
-                registrations = _context.Registrations
-                                .Include(r => r.RegistrationDetails)
-                                .ToList();
-            }
-            else //user is a customer, so only display their records
-            //registration is assocated with a particular user (look on the registration model class)
-            //every logged in user is allowed to access index page, but their results will be different
-            {
-                registrations = _context.Registrations
-                                .Include(r => r.RegistrationDetails)
-                                .Where(r => r.User.UserName == User.Identity.Name)
-                                .ToList();
-            }
+            var reservations = await _context.Reservations
+                .Include(r => r.Property)
+                .Include(r => r.Customer)
+                .Where(r => r.CustomerID == userId)
+                .OrderByDescending(r => r.CheckIn)
+                .ToListAsync();
 
-            //
-            return View(registrations);
+            return View(reservations);
         }
 
-        // GET: Registrations/Details/5
-        public async Task<IActionResult> Details(int? id)
+        // GET: Reservations/Create/5 (PropertyId)
+        [Authorize]
+        public async Task<IActionResult> Create(int? id)
         {
-            //the user did not specify a registration to view
             if (id == null)
             {
-                return View("Error", new String[] { "Please specify a registration to view!" });
+                return NotFound();
             }
 
-            //find the registration in the database
-            Registration registration = await _context.Registrations
-                                              .Include(r => r.RegistrationDetails)
-                                              .ThenInclude(r => r.Course)
-                                              .Include(r => r.User)
-                                              .FirstOrDefaultAsync(m => m.RegistrationID == id);
+            var property = await _context.Properties
+                .Include(p => p.Category)
+                .FirstOrDefaultAsync(p => p.PropertyID == id);
 
-            //registration was not found in the database
-            if (registration == null)
+            if (property == null)
             {
-                return View("Error", new String[] { "This registration was not found!" });
+                return NotFound();
             }
 
-            //make sure this registration belongs to this user
-            if (User.IsInRole("Customer") && registration.User.UserName != User.Identity.Name)
-            {
-                return View("Error", new String[] { "This is not your order!  Don't be such a snoop!" });
-            }
-
-            //Send the user to the details page
-            return View(registration);
+            return View(property);
         }
 
-        //ONLY customers can create a registration -- business driven
-        //make sure that the user selected a product; overrides controller-level authorization
-
-        [Authorize(Roles = "Customer")]
-        public IActionResult AddToCart(int? courseID)
-        {
-            if (courseID == null)
-            {
-                return View("Error", new string[] { "Please specify a course to add to the registration" });
-            }
-
-            //find the course in the database
-            Course dbCourse = _context.Courses.Find(courseID);
-
-            //make sure the product exists in the database
-            if (dbCourse == null)
-            {
-                return View("Error", new string[] { "This course was not in the database!" });
-            }
-
-            //find the cart for this customer
-            Registration reg = _context.Registrations.FirstOrDefault(r => r.User.UserName == User.Identity.Name && r.Status == RegistrationStatus.Pending);
-
-            //if this registration is null, there isn't one yet, so create it
-            if (reg == null)
-            {
-                //create a new object
-                reg = new Registration();
-
-                //update the generated properties of the registration
-                reg.Status = RegistrationStatus.Pending;
-                reg.RegistrationDate = DateTime.Now;
-                reg.RegistrationNumber = GenerateNextRegistrationNumber.GetNextRegistrationNumber(_context);
-                reg.User = _context.Users.FirstOrDefault(u => u.UserName == User.Identity.Name);
-
-                //add the registration to the database
-                _context.Registrations.Add(reg);
-                _context.SaveChanges();
-            }
-
-            //now create the registration detail
-            RegistrationDetail rd = new RegistrationDetail();
-
-            //add the course to the registration detail
-            rd.Course = dbCourse;
-
-            //add the registration to the registration detail
-            rd.Registration = reg;
-
-            //you can assume the quantity is zero - they can edit it later
-            rd.NumberOfStudents = 1;
-
-            //calculate the properties on the regdetails
-            rd.CourseFee = dbCourse.CourseFee;
-            rd.TotalFees = dbCourse.CourseFee * rd.NumberOfStudents;
-
-            //add the registration detail to the database
-            _context.RegistrationDetails.Add(rd);
-            _context.SaveChanges(true);
-
-            //go to the details view
-            return RedirectToAction("Details", new { id = reg.RegistrationID });
-        }
-
-        // GET: Registrations/Edit/5
-        public IActionResult Edit(int? id)
-        {
-            //user did not specify a registration to edit
-            if (id == null)
-            {
-                return View("Error", new String[] { "Please specify a registration to edit" });
-            }
-
-            //find the registration in the database, and be sure to include details
-            Registration registration = _context.Registrations
-                                       .Include(r => r.RegistrationDetails)
-                                       .ThenInclude(r => r.Course)
-                                       .Include(r => r.User)
-                                       .FirstOrDefault(r => r.RegistrationID == id);
-
-            //registration was nout found in the database
-            if (registration == null)
-            {
-                return View("Error", new String[] { "This registration was not found in the database!" });
-            }
-
-            //registration does not belong to this user
-            if (User.IsInRole("Customer") && registration.User.UserName != User.Identity.Name)
-            {
-                return View("Error", new String[] { "You are not authorized to edit this registration!" });
-            }
-
-            //registration is complete - cannot be edited
-            if (registration.Status == RegistrationStatus.Completed)
-            {
-                return View("Error", new string[] { "This order is complete and cannot be changed!" });
-            }
-
-            //send the user to the registration edit view
-            return View(registration);
-        }
-
-        // POST: Registrations/Edit/5
+        // POST: Reservations/Create
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Registration registration)
+        public async Task<IActionResult> Create([Bind("PropertyID,CheckIn,CheckOut,NumOfGuests")] Reservation reservation)
         {
-            //this is a security measure to make sure the user is editing the correct registration
-            if (id != registration.RegistrationID)
+            if (ModelState.IsValid)
             {
-                return View("Error", new String[] { "There was a problem editing this registration. Try again!" });
+                // Get property details
+                var property = await _context.Properties
+                    .FirstOrDefaultAsync(p => p.PropertyID == reservation.PropertyID);
+
+                if (property == null)
+                {
+                    return NotFound();
+                }
+
+                // Check for date conflicts
+                bool hasConflict = await _context.Reservations
+                    .AnyAsync(r => r.PropertyID == reservation.PropertyID &&
+                                 r.ReservationStatus &&
+                                 ((reservation.CheckIn >= r.CheckIn && reservation.CheckIn < r.CheckOut) ||
+                                  (reservation.CheckOut > r.CheckIn && reservation.CheckOut <= r.CheckOut) ||
+                                  (reservation.CheckIn <= r.CheckIn && reservation.CheckOut >= r.CheckOut)));
+
+                if (hasConflict)
+                {
+                    ModelState.AddModelError("", "Selected dates conflict with existing reservation.");
+                    return View(property);
+                }
+
+                // Set prices from property
+                reservation.WeekdayPrice = property.WeekdayPrice;
+                reservation.WeekendPrice = property.WeekendPrice;
+                reservation.CleaningFee = property.CleaningFee;
+                reservation.CustomerID = User.FindFirst(ClaimTypes.NameIdentifier).Value;
+
+                // Set confirmation number
+                int lastConfirmationNumber = await _context.Reservations
+                    .MaxAsync(r => (int?)r.ConfirmationNumber) ?? FIRST_CONFIRMATION_NUMBER - 1;
+                reservation.ConfirmationNumber = lastConfirmationNumber + 1;
+
+                // Add to cart (session) instead of direct booking
+                var cart = HttpContext.Session.GetObjectFromJson<List<Reservation>>("Cart") ?? new List<Reservation>();
+                cart.Add(reservation);
+                HttpContext.Session.SetObjectAsJson("Cart", cart);
+
+                return RedirectToAction(nameof(Cart));
+            }
+            return View(await _context.Properties.FindAsync(reservation.PropertyID));
+        }
+
+        // GET: Reservations/Cart
+        [Authorize]
+        public IActionResult Cart()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<Reservation>>("Cart") ?? new List<Reservation>();
+            return View(cart);
+        }
+
+        // POST: Reservations/Checkout
+        [HttpPost]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Checkout()
+        {
+            var cart = HttpContext.Session.GetObjectFromJson<List<Reservation>>("Cart") ?? new List<Reservation>();
+
+            if (!cart.Any())
+            {
+                return RedirectToAction(nameof(Cart));
             }
 
-            //if there is something wrong with this order, try again
-            if (ModelState.IsValid == false)
+            // Final validation
+            foreach (var reservation in cart)
             {
-                return View(registration);
+                reservation.ReservationStatus = true;
+                _context.Reservations.Add(reservation);
             }
 
-            //if code gets this far, update the record
-            try
-            {
-                //find the record in the database
-                Registration dbRegistration = _context.Registrations.Find(registration.RegistrationID);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.Remove("Cart");
 
-                //update the notes
-                dbRegistration.RegistrationNotes = registration.RegistrationNotes;
+            return RedirectToAction(nameof(Confirmation), new { id = cart.First().ConfirmationNumber });
+        }
 
-                _context.Update(dbRegistration);
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception ex)
+        // GET: Reservations/Cancel/5
+        [Authorize]
+        public async Task<IActionResult> Cancel(int? id)
+        {
+            if (id == null)
             {
-                return View("Error", new String[] { "There was an error updating this registration!", ex.Message });
+                return NotFound();
             }
 
-            //send the user to the Registrations Index page.
+            var reservation = await _context.Reservations
+                .Include(r => r.Property)
+                .FirstOrDefaultAsync(r => r.ReservationID == id);
+
+            if (reservation == null)
+            {
+                return NotFound();
+            }
+
+            // Check if cancellation is allowed (more than 1 day before check-in)
+            if (reservation.CheckIn <= DateTime.Now.AddDays(1))
+            {
+                TempData["ErrorMessage"] = "Cancellation is only allowed more than 1 day before check-in.";
+                return RedirectToAction(nameof(Index));
+            }
+
+            return View(reservation);
+        }
+
+        // POST: Reservations/Cancel/5
+        [HttpPost, ActionName("Cancel")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> CancelConfirmed(int id)
+        {
+            var reservation = await _context.Reservations.FindAsync(id);
+            reservation.ReservationStatus = false;
+            await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-
-        //GET: Registrations/Create
-        [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> Create()
+        // GET: Reservations/Confirmation/5
+        public async Task<IActionResult> Confirmation(int? id)
         {
-            if (User.IsInRole("Customer"))
-            {
-                Registration reg = new Registration();
-                reg.User = await _userManager.FindByNameAsync(User.Identity.Name);
-                return View(reg);
-            }
-            else
-            {
-                ViewBag.UserNames = await GetAllCustomerUserNamesSelectList();
-                return View("SelectCustomerForRegistration");
-            }
-        }
-
-
-        [HttpPost]
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        //create registration -- you don't get to tell what user you are -- we get it from the DB
-        public async Task<IActionResult> Create([Bind("User, RegistrationNotes")] Registration registration)
-        {
-            //Find the next registration number from the utilities class
-            registration.RegistrationNumber = Utilities.GenerateNextRegistrationNumber.GetNextRegistrationNumber(_context);
-
-            //Set the date of this order
-            registration.RegistrationDate = DateTime.Now;
-
-            //Associate the registration with the logged-in customer
-            registration.User = await _userManager.FindByNameAsync(registration.User.UserName);
-
-
-            //if code gets this far, add the registration to the database
-            _context.Add(registration);
-            await _context.SaveChangesAsync();
-
-            //send the user on to the action that will allow them to 
-            //create a registration detail.  Be sure to pass along the RegistrationID
-            //that you created when you added the registration to the database above
-            return RedirectToAction("Create", "RegistrationDetails", new { registrationID = registration.RegistrationID });
-        }
-
-
-        [HttpPost]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> SelectCustomerForRegistration(String SelectedCustomer)
-        {
-            if (String.IsNullOrEmpty(SelectedCustomer))
-            {
-                ViewBag.UserNames = await GetAllCustomerUserNamesSelectList();
-                return View("SelectCustomerForRegistration");
-            }
-
-            Registration reg = new Registration();
-            reg.User = await _userManager.FindByNameAsync(SelectedCustomer);
-            return View("Create", reg);
-        }
-
-
-        [Authorize]
-        public async Task<IActionResult> CheckoutRegistration(int? id)
-        {
-            //the user did not specify a registration to view
             if (id == null)
             {
-                return View("Error", new String[] { "Please specify a registration to view!" });
+                return NotFound();
             }
 
-            //find the registration in the database
-            Registration registration = await _context.Registrations
-                                              .Include(r => r.RegistrationDetails)
-                                              .ThenInclude(r => r.Course)
-                                              .Include(r => r.User)
-                                              .FirstOrDefaultAsync(m => m.RegistrationID == id);
+            var reservation = await _context.Reservations
+                .Include(r => r.Property)
+                .FirstOrDefaultAsync(r => r.ConfirmationNumber == id);
 
-            //registration was not found in the database
-            if (registration == null)
+            if (reservation == null)
             {
-                return View("Error", new String[] { "This registration was not found!" });
+                return NotFound();
             }
 
-            //make sure this registration belongs to this user
-            if (User.IsInRole("Customer") && registration.User.UserName != User.Identity.Name)
-            {
-                return View("Error", new String[] { "This is not your order!  Don't be such a snoop!" });
-            }
+            return View(reservation);
+        }
+    }
 
-            //Send the user to the details page
-            return View("Confirm",registration);
+    // Extension methods for Session
+    public static class SessionExtensions
+    {
+        public static void SetObjectAsJson(this ISession session, string key, object value)
+        {
+            session.SetString(key, JsonSerializer.Serialize(value));
         }
 
-        public async Task<IActionResult> Confirm(int? id)
+        public static T GetObjectFromJson<T>(this ISession session, string key)
         {
-            Registration dbReg = await _context.Registrations.FindAsync(id);
-            dbReg.Status = RegistrationStatus.Completed;
-            _context.Update(dbReg);
-            _context.SaveChanges();
-
-            return RedirectToAction("Index");
-        }
-
-
-        public async Task<SelectList> GetAllCustomerUserNamesSelectList()
-        {
-            //create a list to hold the customers
-            List<AppUser> allCustomers = new List<AppUser>();
-
-            //See if the user is a customer
-            foreach (AppUser dbUser in _context.Users)
-            {
-                //if the user is a customer, add them to the list of customers
-                if (await _userManager.IsInRoleAsync(dbUser, "Customer") == true)//user is a customer
-                { 
-                    allCustomers.Add(dbUser);
-                }
-            }
-
-            //create a new select list with the customer emails
-            SelectList sl = new SelectList(allCustomers.OrderBy(c => c.Email), nameof(AppUser.UserName), nameof(AppUser.Email));
-
-            //return the select list
-            return sl;
-
+            var value = session.GetString(key);
+            return value == null ? default(T) : JsonSerializer.Deserialize<T>(value);
         }
     }
 }
