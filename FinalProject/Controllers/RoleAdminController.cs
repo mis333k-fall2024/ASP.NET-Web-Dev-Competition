@@ -23,10 +23,25 @@ namespace FinalProject.Controllers
             _roleManager = roleManager;
         }
 
-        // GET: RoleAdmin
+        // GET: RoleAdmin/Index
         public async Task<IActionResult> Index()
         {
-            List<AppUser> users = await _context.Users.ToListAsync();
+            List<AdminUserViewModel> users = new List<AdminUserViewModel>();
+            foreach (AppUser user in await _userManager.Users.ToListAsync())
+            {
+                AdminUserViewModel model = new AdminUserViewModel
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    PhoneNumber = user.PhoneNumber,
+                    Address = user.Address,
+                    HireStatus = user.HireStatus ?? false,
+                    Roles = (await _userManager.GetRolesAsync(user)).ToList()
+                };
+                users.Add(model);
+            }
             return View(users);
         }
 
@@ -50,29 +65,39 @@ namespace FinalProject.Controllers
         // POST: RoleAdmin/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id,FirstName,LastName,Address,Birthday,HireStatus")] AppUser user)
+        public async Task<IActionResult> Edit(string id, AppUser model)
         {
-            if (id != user.Id)
+            if (id != model.Id)
+            {
+                return NotFound();
+            }
+
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
             {
                 return NotFound();
             }
 
             if (ModelState.IsValid)
             {
-                var existingUser = await _userManager.FindByIdAsync(id);
-                existingUser.FirstName = user.FirstName;
-                existingUser.LastName = user.LastName;
-                existingUser.Address = user.Address;
-                existingUser.Birthday = user.Birthday;
-                existingUser.HireStatus = user.HireStatus;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.Birthday = model.Birthday;
+                user.PhoneNumber = model.PhoneNumber;
+                user.HireStatus = model.HireStatus;
 
-                await _userManager.UpdateAsync(existingUser);
-                return RedirectToAction(nameof(Index));
+                var result = await _userManager.UpdateAsync(user);
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                AddErrorsFromResult(result);
             }
             return View(user);
         }
 
-        // POST: RoleAdmin/ResetPassword
+        // POST: RoleAdmin/ResetPassword/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(string id, string newPassword)
@@ -82,4 +107,35 @@ namespace FinalProject.Controllers
                 return BadRequest();
             }
 
-            var user = await _userManager.FindBy
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            string resetToken = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, resetToken, newPassword);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+
+            return RedirectToAction(nameof(Index));
+        }
+
+        // Helper method to add Identity errors to ModelState
+        private void AddErrorsFromResult(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError("", error.Description);
+            }
+        }
+    }
+}

@@ -106,7 +106,7 @@
         checkInInput.min = today;
 
         // Update check-out minimum date when check-in is selected
-        checkInInput.addEventListener('change', function() {
+        checkInInput.addEventListener('change', function () {
             checkOutInput.min = this.value;
             if (checkOutInput.value && checkOutInput.value < this.value) {
                 checkOutInput.value = this.value;

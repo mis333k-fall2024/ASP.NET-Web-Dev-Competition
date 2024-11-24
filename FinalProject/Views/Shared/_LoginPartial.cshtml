@@ -1,19 +1,17 @@
-﻿@using Microsoft.AspNetCore.Identity;
+﻿@using Microsoft.AspNetCore.Identity
+
 @if (User.Identity.IsAuthenticated)
 {
-    <form asp-action="LogOff" asp-controller="Account" method="post" id="logoutForm" class="navbar-right" )>
-        <ul class="nav navbar-nav navbar-right">
-            <li>
-                <a asp-action="Index" asp-controller="Account" title="Manage" class="nav-link">Hello @User.Identity.Name!</a>
-            </li>
-            <li><a href="javascript:document.getElementById('logoutForm').submit()"><span class="nav-link">Log Off</span></a></li>
-        </ul>
+    <form asp-action="LogOff" asp-controller="Account" method="post" id="logoutForm" class="d-flex align-items-center">
+        <span class="text-light me-3">Hello @User.Identity.Name!</span>
+        <a asp-action="Index" asp-controller="Account" title="Manage" class="btn btn-outline-light me-2">Account</a>
+        <button type="submit" class="btn btn-outline-light">Log Out</button>
     </form>
 }
 else
 {
-    <ul class="nav navbar-nav navbar-right">
-        <li><a asp-action="Register" asp-controller="Account" id="registerLink" class="nav-link">Register</a></li>
-        <li><a asp-action="Login" asp-controller="Account" id="loginLink" class="nav-link">Log in</a></li>
-    </ul>
+    <div class="d-flex">
+        <a asp-action="Register" asp-controller="Account" class="btn btn-outline-light me-2">Register</a>
+        <a asp-action="Login" asp-controller="Account" class="btn btn-light">Log in</a>
+    </div>
 }

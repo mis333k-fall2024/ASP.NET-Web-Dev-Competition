@@ -6,47 +6,66 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - Book Store</title>
+    <title>@ViewBag.Title - BevoBnB</title>
     <link href="~/lib/twitter-bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
 </head>
 <body>
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="nav-content">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item">
-                        <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a asp-controller="Products" asp-action="Index" class="nav-link">Products</a>
-                    </li>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        @if (User.IsInRole("Admin"))
+            <div class="container-fluid">
+                <a class="navbar-brand" asp-controller="Home" asp-action="Index">BevoBnB</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-content"
+                        aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="nav-content">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
+                        </li>
+                        <li class="nav-item">
+                            <a asp-controller="Properties" asp-action="Index" class="nav-link">Properties</a>
+                        </li>
+                        @if (User.Identity.IsAuthenticated)
                         {
-                            <li>
-                                <a asp-controller="RoleAdmin" asp-action="Index" class="nav-link">Manage Users</a>
-                            </li>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="RoleAdmin" asp-action="Index" class="nav-link">Manage Users</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Host"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Properties" asp-action="MyProperties" class="nav-link">My Properties</a>
+                                </li>
+                            }
+                            @if (User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item">
+                                    <a asp-controller="Reservations" asp-action="Index" class="nav-link">My Reservations</a>
+                                </li>
+                            }
                         }
-                    }
-                </ul>
+                    </ul>
+                    <div class="d-flex">
+                        @await Html.PartialAsync("_LoginPartial")
+                    </div>
+                </div>
             </div>
-            @await Html.PartialAsync("_LoginPartial")
         </nav>
     </div>
 
-    <div class="container">
+    <div class="container-fluid py-4">
         @RenderBody()
     </div>
 
     <script src="~/lib/jquery/jquery.min.js"></script>
-    <script src="~/lib/popper.js/popper.js"></script>
-    <script src="~/lib/twitter-bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jquery-validate/jquery.validate.js"></script>
     <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
 
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
