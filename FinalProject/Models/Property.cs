@@ -20,6 +20,11 @@ namespace FinalProject.Models
         [Display(Name = "Property Number")]
         public Int32 PropertyNumber { get; set; }
 
+        // Property name for searching
+        [Required(ErrorMessage = "Property name is required")]
+        [Display(Name = "Property Name")]
+        public String PropertyName { get; set; }
+
         // Location details
         [Required(ErrorMessage = "Street address is required")]
         [Display(Name = "Street Address")]
@@ -87,6 +92,10 @@ namespace FinalProject.Models
         [Display(Name = "Property Status")]
         public Boolean PropertyStatus { get; set; }
 
+        // Admin approval tracking
+        [Display(Name = "Approval Status")]
+        public Boolean AdminApproved { get; set; }
+
         // Navigational Properties
         // These establish relationships between the Property and other entities:
 
@@ -113,6 +122,9 @@ namespace FinalProject.Models
 
             // Set default property status to active
             PropertyStatus = true;
+
+            // Properties start as unapproved by default
+            AdminApproved = false;
         }
     }
 }

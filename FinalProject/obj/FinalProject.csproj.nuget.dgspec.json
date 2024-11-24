@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\mis333k\\Final Project\\FinalProject\\FinalProject\\FinalProject.csproj": {}
+    "C:\\Users\\Dat Ly\\Desktop\\Github\\Group-25\\FinalProject\\FinalProject.csproj": {}
   },
   "projects": {
-    "C:\\mis333k\\Final Project\\FinalProject\\FinalProject\\FinalProject.csproj": {
+    "C:\\Users\\Dat Ly\\Desktop\\Github\\Group-25\\FinalProject\\FinalProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\mis333k\\Final Project\\FinalProject\\FinalProject\\FinalProject.csproj",
+        "projectUniqueName": "C:\\Users\\Dat Ly\\Desktop\\Github\\Group-25\\FinalProject\\FinalProject.csproj",
         "projectName": "FinalProject",
-        "projectPath": "C:\\mis333k\\Final Project\\FinalProject\\FinalProject\\FinalProject.csproj",
-        "packagesPath": "C:\\Users\\JeksEnterprises\\.nuget\\packages\\",
-        "outputPath": "C:\\mis333k\\Final Project\\FinalProject\\FinalProject\\obj\\",
+        "projectPath": "C:\\Users\\Dat Ly\\Desktop\\Github\\Group-25\\FinalProject\\FinalProject.csproj",
+        "packagesPath": "C:\\Users\\Dat Ly\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Dat Ly\\Desktop\\Github\\Group-25\\FinalProject\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\JeksEnterprises\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Dat Ly\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

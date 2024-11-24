@@ -9,39 +9,43 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = FinalProject
 build_property.RootNamespace = FinalProject
-build_property.ProjectDir = C:\mis333k\Final Project\FinalProject\FinalProject\
+build_property.ProjectDir = C:\Users\Dat Ly\Desktop\Github\Group-25\FinalProject\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 
 build_property.RazorLangVersion = 8.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\mis333k\Final Project\FinalProject\FinalProject
+build_property.MSBuildProjectDirectory = C:\Users\Dat Ly\Desktop\Github\Group-25\FinalProject
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/Seed/Confirm.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Seed/Confirm.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VlZFxDb25maXJtLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/Seed/Index.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Seed/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2VlZFxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/Shared/Error.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/Shared/_Layout.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/Shared/_LoginPartial.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/Shared/_LoginPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9Mb2dpblBhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/_ViewImports.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/mis333k/Final Project/FinalProject/FinalProject/Views/_ViewStart.cshtml]
+[C:/Users/Dat Ly/Desktop/Github/Group-25/FinalProject/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
