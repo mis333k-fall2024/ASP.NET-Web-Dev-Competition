@@ -65,7 +65,13 @@
                             <span class="badge bg-secondary">@property.Category.CategoryName</span>
                             <span class="ms-2">
                                 <i class="bi bi-star-fill text-warning"></i>
-                                @property.Reviews.Where(r => !r.DisputeStatus).Average(r => r.Rating).ToString("F1")
+                                @{
+                                    var validReviews = property.Reviews?.Where(r => !r.DisputeStatus);
+                                    var averageRating = validReviews != null && validReviews.Any()
+                                    ? validReviews.Average(r => r.Rating).ToString("F1")
+                                    : "New";
+                                }
+                                @averageRating
                             </span>
                         </p>
                         <p class="card-text">
