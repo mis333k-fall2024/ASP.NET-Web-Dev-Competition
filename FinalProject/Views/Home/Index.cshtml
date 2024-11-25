@@ -7,7 +7,7 @@
 <div class="container-fluid">
     <!-- Search Section -->
     <div class="mb-4 p-4 bg-light rounded">
-        <form asp-controller="Properties" asp-action="Search" method="get" class="row g-3">
+        <form asp-controller="Property" asp-action="Search" method="get" class="row g-3">
             <div class="col-md-3">
                 <input type="text" name="location" class="form-control" placeholder="Where to?" />
             </div>
@@ -24,7 +24,7 @@
                 <button type="submit" class="btn btn-primary w-100">Search</button>
             </div>
             <div class="col-md-1">
-                <a asp-controller="Properties" asp-action="AdvancedSearch" class="btn btn-outline-secondary w-100">
+                <a asp-controller="Property" asp-action="Search" class="btn btn-outline-secondary w-100">
                     <i class="bi bi-sliders"></i>
                 </a>
             </div>
@@ -36,7 +36,7 @@
         <div class="d-flex gap-3 overflow-auto">
             @foreach (var category in ViewBag.Categories)
             {
-                <a asp-controller="Properties"
+                <a asp-controller="Property"
                    asp-action="Search"
                    asp-route-category="@category.CategoryID"
                    class="text-decoration-none">
@@ -51,7 +51,7 @@
         </div>
     </div>
 
-    <!-- Featured Properties -->
+    <!-- Featured Property -->
     <h2 class="mb-4">Featured Places to Stay</h2>
     <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
         @foreach (var property in Model.Where(p => p.PropertyStatus && p.AdminApproved))
@@ -84,7 +84,7 @@
                         </p>
                     </div>
                     <div class="card-footer">
-                        <a asp-controller="Properties"
+                        <a asp-controller="Property"
                            asp-action="Details"
                            asp-route-id="@property.PropertyID"
                            class="btn btn-outline-primary w-100">
@@ -98,7 +98,7 @@
 
     <!-- Record Count -->
     <div class="mt-4 text-muted">
-        Showing @Model.Count(p => p.PropertyStatus && p.AdminApproved) of @Model.Count() Properties
+        Showing @Model.Count(p => p.PropertyStatus && p.AdminApproved) of @Model.Count() Property
     </div>
 </div>
 

@@ -1,0 +1,186 @@
+﻿@model IEnumerable<Property>
+
+@{
+    ViewData["Title"] = "Search Properties";
+}
+
+<div class="container">
+    <!-- Basic Search Bar -->
+    <div class="mb-4 p-4 bg-light rounded">
+        <form asp-action="Search" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="location" class="form-control" placeholder="Where to?" value="@Context.Request.Query["location"]" />
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="checkIn" class="form-control" value="@Context.Request.Query["checkIn"]" />
+            </div>
+            <div class="col-md-2">
+                <input type="date" name="checkOut" class="form-control" value="@Context.Request.Query["checkOut"]" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="guests" class="form-control" placeholder="Guests" min="1" value="@Context.Request.Query["guests"]" />
+            </div>
+            <div class="col-md-2">
+                <select name="categoryId" class="form-select">
+                    <option value="">All Categories</option>
+                    @foreach (var category in ViewBag.Categories)
+                    {
+                        <option value="@category.CategoryID"
+                                selected="@(Context.Request.Query["categoryId"] == category.CategoryID.ToString())">
+                            @category.CategoryName
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="col-md-1">
+                <button type="button" class="btn btn-secondary w-100" data-bs-toggle="collapse" data-bs-target="#advancedSearch">
+                    <i class="bi bi-sliders"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Advanced Search (Collapsible) -->
+    <div id="advancedSearch" class="collapse mb-4">
+        <div class="card">
+            <div class="card-body">
+                <form asp-action="Search" method="get" id="advancedSearchForm">
+                    <!-- Preserve basic search parameters -->
+                    <input type="hidden" name="location" value="@Context.Request.Query["location"]" />
+                    <input type="hidden" name="checkIn" value="@Context.Request.Query["checkIn"]" />
+                    <input type="hidden" name="checkOut" value="@Context.Request.Query["checkOut"]" />
+                    <input type="hidden" name="guests" value="@Context.Request.Query["guests"]" />
+                    <input type="hidden" name="categoryId" value="@Context.Request.Query["categoryId"]" />
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label">Price Range</label>
+                            <div class="input-group">
+                                <input type="number" name="minPrice" class="form-control" placeholder="Min" min="0"
+                                       value="@Context.Request.Query["minPrice"]" />
+                                <input type="number" name="maxPrice" class="form-control" placeholder="Max" min="0"
+                                       value="@Context.Request.Query["maxPrice"]" />
+                            </div>
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Minimum Bedrooms</label>
+                            <input type="number" name="minBedrooms" class="form-control" min="1"
+                                   value="@Context.Request.Query["minBedrooms"]" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Minimum Bathrooms</label>
+                            <input type="number" name="minBathrooms" class="form-control" min="1"
+                                   value="@Context.Request.Query["minBathrooms"]" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Minimum Rating</label>
+                            <input type="number" name="minRating" class="form-control" min="1" max="5" step="0.1"
+                                   value="@Context.Request.Query["minRating"]" />
+                        </div>
+
+                        <div class="col-md-3">
+                            <label class="form-label">Amenities</label>
+                            <div class="form-check">
+                                <input type="checkbox" name="petsAllowed" class="form-check-input" value="true"
+                                @(Context.Request.Query["petsAllowed"] == "true" ? "checked" : "") />
+                                <label class="form-check-label">Pets Allowed</label>
+                            </div>
+                            <div class="form-check">
+                                <input type="checkbox" name="freeParking" class="form-check-input" value="true"
+                                @(Context.Request.Query["freeParking"] == "true" ? "checked" : "") />
+                                <label class="form-check-label">Free Parking</label>
+                            </div>
+                        </div>
+
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary">Apply Filters</button>
+                            <button type="reset" class="btn btn-secondary">Clear Filters</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Search Results -->
+    <h3>Search Results</h3>
+    <p>Showing @Model.Count() of @ViewBag.TotalCount Properties</p>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var property in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Property Image" />
+                    <div class="card-body">
+                        <h5 class="card-title">@property.PropertyName</h5>
+                        <p class="card-text">
+                            <i class="bi bi-geo-alt"></i> @property.City, @property.State
+                            <span class="badge bg-secondary">@property.Category.CategoryName</span>
+                            @if (property.Reviews?.Any() == true)
+                            {
+                                <span class="ms-2">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    @property.Reviews.Where(r => !r.DisputeStatus).Average(r => r.Rating).ToString("F1")
+                                </span>
+                            }
+                        </p>
+                        <ul class="list-unstyled">
+                            <li><i class="bi bi-people"></i> @property.GuestsAllowed guests</li>
+                            <li><i class="bi bi-door-closed"></i> @property.Bedrooms bedrooms</li>
+                            <li><i class="bi bi-water"></i> @property.Bathrooms bathrooms</li>
+                            <li><strong>@property.WeekdayPrice.ToString("C")</strong> / night</li>
+                        </ul>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Details" asp-route-id="@property.PropertyID"
+                           class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    @if (!Model.Any())
+    {
+        <div class="text-center my-5">
+            <h3>No properties found matching your criteria</h3>
+            <p>Try adjusting your search filters</p>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Set minimum date for check-in to today
+        const checkInInput = document.querySelector('input[name="checkIn"]');
+        const checkOutInput = document.querySelector('input[name="checkOut"]');
+
+        const today = new Date().toISOString().split('T')[0];
+        checkInInput.min = today;
+
+        // Update check-out minimum date when check-in is selected
+        checkInInput.addEventListener('change', function () {
+            checkOutInput.min = this.value;
+            if (checkOutInput.value && checkOutInput.value < this.value) {
+                checkOutInput.value = this.value;
+            }
+        });
+
+        // Auto-submit basic search form when category changes
+        document.querySelector('select[name="categoryId"]').addEventListener('change', function () {
+            this.closest('form').submit();
+        });
+
+        // Clear advanced search form
+        document.querySelector('button[type="reset"]').addEventListener('click', function (e) {
+            e.preventDefault();
+            const form = document.getElementById('advancedSearchForm');
+            form.reset();
+            form.submit();
+        });
+    </script>
+}

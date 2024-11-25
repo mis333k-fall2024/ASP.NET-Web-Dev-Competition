@@ -1,8 +1,9 @@
-﻿@* Views/Property/Details.cshtml *@
-@model Property
+﻿@model Property
 
 @{
     ViewData["Title"] = Model.PropertyName;
+    var validReviews = Model.Reviews?.Where(r => !r.DisputeStatus);
+    var averageRating = validReviews?.Any() == true ? validReviews.Average(r => r.Rating) : 0;
 }
 
 <div class="container">
@@ -10,19 +11,26 @@
         <div class="col-md-8">
             <img src="/api/placeholder/800/600" class="img-fluid rounded mb-4" alt="Property Image" />
 
-            <h1>@Model.PropertyName</h1>
-            <p class="lead">
-                @Model.City, @Model.State
-                <span class="badge bg-secondary">@Model.Category.CategoryName</span>
-            </p>
+            <div class="mb-4">
+                <h1>@Model.PropertyName</h1>
+                <p class="lead">
+                    <i class="bi bi-geo-alt"></i> @Model.City, @Model.State
+                    <span class="badge bg-secondary">@Model.Category.CategoryName</span>
+                    @if (validReviews?.Any() == true)
+                    {
+                        <span class="ms-2">
+                            <i class="bi bi-star-fill text-warning"></i>
+                            @averageRating.ToString("F1")
+                        </span>
+                    }
+                </p>
+            </div>
 
-            <hr />
-
-            <div class="row">
+            <div class="row mb-4">
                 <div class="col-md-6">
                     <h4>Property Details</h4>
                     <ul class="list-unstyled">
-                        <li><i class="bi bi-people"></i> @Model.GuestsAllowed guests max</li>
+                        <li><i class="bi bi-people"></i> Up to @Model.GuestsAllowed guests</li>
                         <li><i class="bi bi-door-closed"></i> @Model.Bedrooms bedrooms</li>
                         <li><i class="bi bi-water"></i> @Model.Bathrooms bathrooms</li>
                         <li>
@@ -43,10 +51,7 @@
                         <li>Cleaning fee: @Model.CleaningFee.ToString("C")</li>
                         @if (Model.DiscountRate > 0)
                         {
-                            <li>
-                                @Model.DiscountRate% discount for stays of
-                                @Model.MinNightsForDiscount nights or more
-                            </li>
+                            <li>@Model.DiscountRate% discount for stays of @Model.MinNightsForDiscount nights or more</li>
                         }
                     </ul>
                 </div>
@@ -54,35 +59,55 @@
         </div>
 
         <div class="col-md-4">
-            @if (User.Identity.IsAuthenticated)
-            {
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">Book this property</h5>
-                        <a asp-controller="Reservations" asp-action="Create"
-                           asp-route-id="@Model.PropertyID"
-                           class="btn btn-primary w-100">Reserve Now</a>
-                    </div>
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Book this property</h5>
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <form asp-controller="Reservation" asp-action="Create" method="get">
+                            <input type="hidden" name="id" value="@Model.PropertyID" />
+                            <button type="submit" class="btn btn-primary w-100">Reserve Now</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">
+                            Please <a asp-controller="Account" asp-action="Login">log in</a> to make a reservation
+                        </div>
+                    }
                 </div>
-            }
-            else
-            {
-                <div class="alert alert-info">
-                    <a asp-controller="Account" asp-action="Login">Log in</a> to make a reservation
-                </div>
-            }
+            </div>
         </div>
     </div>
 
+    <!-- Reviews Section -->
     <div class="mt-4">
         <h3>Reviews</h3>
-        @if (!Model.Reviews?.Any() == true)
+        @if (validReviews?.Any() == true)
         {
-            <p>No reviews yet</p>
+            foreach (var review in validReviews)
+            {
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                @for (int i = 0; i < review.Rating; i++)
+                                {
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                }
+                                <span class="text-muted ms-2">
+                                    by @review.Customer.FirstName @review.Customer.LastName
+                                </span>
+                            </div>
+                        </div>
+                        <p class="mt-2 mb-0">@review.ReviewText</p>
+                    </div>
+                </div>
+            }
         }
         else
         {
-            @await Html.PartialAsync("_ReviewsList", Model.Reviews.Where(r => !r.DisputeStatus))
+            <p>No reviews yet</p>
         }
     </div>
 </div>
