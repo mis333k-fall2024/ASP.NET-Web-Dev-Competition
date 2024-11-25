@@ -1,0 +1,88 @@
+﻿@* Views/Property/Details.cshtml *@
+@model Property
+
+@{
+    ViewData["Title"] = Model.PropertyName;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <img src="/api/placeholder/800/600" class="img-fluid rounded mb-4" alt="Property Image" />
+
+            <h1>@Model.PropertyName</h1>
+            <p class="lead">
+                @Model.City, @Model.State
+                <span class="badge bg-secondary">@Model.Category.CategoryName</span>
+            </p>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Property Details</h4>
+                    <ul class="list-unstyled">
+                        <li><i class="bi bi-people"></i> @Model.GuestsAllowed guests max</li>
+                        <li><i class="bi bi-door-closed"></i> @Model.Bedrooms bedrooms</li>
+                        <li><i class="bi bi-water"></i> @Model.Bathrooms bathrooms</li>
+                        <li>
+                            <i class="bi bi-@(Model.PetsAllowed ? "check" : "x")"></i>
+                            @(Model.PetsAllowed ? "Pets allowed" : "No pets")
+                        </li>
+                        <li>
+                            <i class="bi bi-@(Model.FreeParking ? "check" : "x")"></i>
+                            @(Model.FreeParking ? "Free parking" : "No free parking")
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Pricing</h4>
+                    <ul class="list-unstyled">
+                        <li>Weekday: @Model.WeekdayPrice.ToString("C") / night</li>
+                        <li>Weekend: @Model.WeekendPrice.ToString("C") / night</li>
+                        <li>Cleaning fee: @Model.CleaningFee.ToString("C")</li>
+                        @if (Model.DiscountRate > 0)
+                        {
+                            <li>
+                                @Model.DiscountRate% discount for stays of
+                                @Model.MinNightsForDiscount nights or more
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Book this property</h5>
+                        <a asp-controller="Reservations" asp-action="Create"
+                           asp-route-id="@Model.PropertyID"
+                           class="btn btn-primary w-100">Reserve Now</a>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info">
+                    <a asp-controller="Account" asp-action="Login">Log in</a> to make a reservation
+                </div>
+            }
+        </div>
+    </div>
+
+    <div class="mt-4">
+        <h3>Reviews</h3>
+        @if (!Model.Reviews?.Any() == true)
+        {
+            <p>No reviews yet</p>
+        }
+        else
+        {
+            @await Html.PartialAsync("_ReviewsList", Model.Reviews.Where(r => !r.DisputeStatus))
+        }
+    </div>
+</div>

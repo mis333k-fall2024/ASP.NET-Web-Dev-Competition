@@ -1,0 +1,87 @@
+﻿@* Views/Review/Index.cshtml *@
+@using System.Security.Claims
+
+@model IEnumerable<Review>
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<div class="container">
+    <h2>Reviews for @ViewBag.PropertyName</h2>
+
+    @if (Model.Any())
+    {
+        <div class="row">
+            @foreach (var review in Model)
+            {
+                <div class="col-md-12 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h5 class="card-title">
+                                        @for (int i = 0; i < review.Rating; i++)
+                                        {
+                                            <i class="bi bi-star-fill text-warning"></i>
+                                        }
+                                    </h5>
+                                    <h6 class="card-subtitle mb-2 text-muted">
+                                        By @review.Customer.FirstName @review.Customer.LastName
+                                    </h6>
+                                </div>
+
+                                @if (User.IsInRole("Host") && review.Property.Host.Id == User.FindFirst(ClaimTypes.NameIdentifier).Value)
+                                {
+                                    <button type="button" class="btn btn-outline-danger btn-sm"
+                                            data-bs-toggle="modal" data-bs-target="#disputeModal@(review.ReviewID)">
+                                        Dispute Review
+                                    </button>
+                                }
+                            </div>
+                            <p class="card-text">@review.ReviewText</p>
+                            @if (!string.IsNullOrEmpty(review.HostComments))
+                            {
+                                <div class="mt-2 p-2 bg-light rounded">
+                                    <small class="text-muted">Host Response:</small>
+                                    <p class="mb-0">@review.HostComments</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                @if (User.IsInRole("Host"))
+                {
+                    <div class="modal fade" id="disputeModal@(review.ReviewID)" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <form asp-action="Dispute" asp-route-id="@review.ReviewID">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Dispute Review</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="disputeDescription">Reason for Dispute</label>
+                                            <textarea name="disputeDescription" class="form-control" rows="3" required></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                        <button type="submit" class="btn btn-primary">Submit Dispute</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    }
+    else
+    {
+        <p>No reviews available for this property.</p>
+    }
+</div>
+

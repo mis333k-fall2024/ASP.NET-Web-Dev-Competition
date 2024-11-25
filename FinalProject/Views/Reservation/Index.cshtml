@@ -1,0 +1,108 @@
+﻿@using System.Security.Claims
+@model IEnumerable<Reservation>
+
+@{
+    ViewData["Title"] = "My Reservations";
+}
+
+<div class="container">
+    <h2>My Reservations</h2>
+
+    <div class="row">
+        <div class="col-md-12">
+            <ul class="nav nav-tabs mb-4">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#upcoming">Upcoming</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#past">Past</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#cancelled">Cancelled</a>
+                </li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="upcoming">
+                    @foreach (var reservation in Model.Where(r => r.CheckIn >= DateTime.Now && r.ReservationStatus))
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/api/placeholder/300/200" class="img-fluid rounded" alt="Property Image" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">@reservation.Property.PropertyName</h5>
+                                        <p class="card-text">
+                                            <i class="bi bi-calendar"></i> @reservation.CheckIn.ToShortDateString() - @reservation.CheckOut.ToShortDateString()<br />
+                                            <i class="bi bi-people"></i> @reservation.NumOfGuests guests<br />
+                                            <i class="bi bi-tag"></i> Confirmation #@reservation.ConfirmationNumber
+                                        </p>
+                                        @if (reservation.CheckIn > DateTime.Now.AddDays(1))
+                                        {
+                                            <a asp-action="Cancel" asp-route-id="@reservation.ReservationID"
+                                               class="btn btn-danger btn-sm">Cancel Reservation</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="tab-pane fade" id="past">
+                    @foreach (var reservation in Model.Where(r => r.CheckOut < DateTime.Now && r.ReservationStatus))
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/api/placeholder/300/200" class="img-fluid rounded" alt="Property Image" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">@reservation.Property.PropertyName</h5>
+                                        <p class="card-text">
+                                            <i class="bi bi-calendar"></i> @reservation.CheckIn.ToShortDateString() - @reservation.CheckOut.ToShortDateString()<br />
+                                            <i class="bi bi-people"></i> @reservation.NumOfGuests guests<br />
+                                            <i class="bi bi-tag"></i> Confirmation #@reservation.ConfirmationNumber
+                                        </p>
+                                        @if (!reservation.Property.Reviews.Any(r => r.CustomerID == User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                                        {
+                                            <a asp-controller="Review" asp-action="Create" asp-route-id="@reservation.PropertyID"
+                                               class="btn btn-primary btn-sm">Write a Review</a>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+                <div class="tab-pane fade" id="cancelled">
+                    @foreach (var reservation in Model.Where(r => !r.ReservationStatus))
+                    {
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <img src="/api/placeholder/300/200" class="img-fluid rounded" alt="Property Image" />
+                                    </div>
+                                    <div class="col-md-8">
+                                        <h5 class="card-title">@reservation.Property.PropertyName</h5>
+                                        <p class="card-text">
+                                            <i class="bi bi-calendar"></i> @reservation.CheckIn.ToShortDateString() - @reservation.CheckOut.ToShortDateString()<br />
+                                            <i class="bi bi-people"></i> @reservation.NumOfGuests guests<br />
+                                            <i class="bi bi-tag"></i> Confirmation #@reservation.ConfirmationNumber
+                                        </p>
+                                        <span class="badge bg-danger">Cancelled</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

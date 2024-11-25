@@ -1,0 +1,39 @@
+﻿@* Views/Category/Index.cshtml *@
+@model IEnumerable<Category>
+
+@{
+    ViewData["Title"] = "Categories";
+}
+
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Property Categories</h2>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary">Add New Category</a>
+        }
+    </div>
+
+    <div class="row">
+        @foreach (var category in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title">@category.CategoryName</h5>
+                        <p class="card-text">
+                            Properties in category: @category.Properties?.Count()
+                        </p>
+                        @if (User.IsInRole("Admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@category.CategoryID" 
+                               class="btn btn-outline-primary">Edit Category</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+

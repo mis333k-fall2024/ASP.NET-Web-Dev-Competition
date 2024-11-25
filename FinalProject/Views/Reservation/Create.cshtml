@@ -1,0 +1,54 @@
+﻿@* Views/Reservation/Create.cshtml *@
+@model Property
+
+@{
+    ViewData["Title"] = "Create Reservation";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-8">
+            <h2>Book Your Stay</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">@Model.PropertyName</h5>
+                    <p class="card-text">
+                        <i class="bi bi-geo-alt"></i> @Model.City, @Model.State<br />
+                        <i class="bi bi-people"></i> Up to @Model.GuestsAllowed guests
+                    </p>
+                </div>
+            </div>
+
+            <form asp-action="Create" class="row g-3">
+                <input type="hidden" name="PropertyID" value="@Model.PropertyID" />
+
+                <div class="col-md-6">
+                    <label class="form-label">Check-in Date</label>
+                    <input type="date" name="CheckIn" class="form-control" required
+                           min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Check-out Date</label>
+                    <input type="date" name="CheckOut" class="form-control" required />
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label">Number of Guests</label>
+                    <input type="number" name="NumOfGuests" class="form-control" required
+                           min="1" max="@Model.GuestsAllowed" />
+                </div>
+
+                <div class="col-12">
+                    <button type="submit" class="btn btn-primary">Add to Cart</button>
+                    <a asp-controller="Properties" asp-action="Details" asp-route-id="@Model.PropertyID"
+                       class="btn btn-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card sticky-top" style="top: 20px;">
+                <div class="card-body">
+                    <h5 class="card-title">Price Details</h5>
+                    <ul class="list-unstyled">

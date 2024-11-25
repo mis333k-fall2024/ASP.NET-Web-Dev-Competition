@@ -1,0 +1,106 @@
+﻿@using System.Security.Claims
+@model List<Reservation>
+
+@{
+    ViewData["Title"] = "Shopping Cart";
+    decimal subtotal = 0;
+    decimal cleaningFees = 0;
+    const decimal TAX_RATE = 0.07m;
+}
+
+<div class="container">
+    <h2>Review Your Reservations</h2>
+
+    @if (!Model.Any())
+    {
+        <div class="alert alert-info">
+            Your cart is empty. <a asp-controller="Property" asp-action="Index">Find a place to stay</a>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+            <div class="col-md-8">
+                @foreach (var reservation in Model)
+                {
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">@reservation.Property.PropertyName</h5>
+                            <p class="card-text">
+                                <i class="bi bi-calendar"></i> @reservation.CheckIn.ToShortDateString() - @reservation.CheckOut.ToShortDateString()<br />
+                                <i class="bi bi-people"></i> @reservation.NumOfGuests guests
+                            </p>
+
+                            @{
+                                var nights = (reservation.CheckOut - reservation.CheckIn).Days;
+                                var weekdayNights = Enumerable.Range(0, nights)
+                                .Count(offset => !new[] { DayOfWeek.Friday, DayOfWeek.Saturday }
+                                .Contains(reservation.CheckIn.AddDays(offset).DayOfWeek));
+                                var weekendNights = nights - weekdayNights;
+
+                                decimal stayPrice = (weekdayNights * reservation.WeekdayPrice) +
+                                (weekendNights * reservation.WeekendPrice);
+
+                                if (nights >= reservation.Property.MinNightsForDiscount)
+                                {
+                                    decimal discountRate = reservation.Property.DiscountRate ?? 0;
+                                    stayPrice *= (1 - (discountRate / 100m));
+                                }
+
+                                subtotal += stayPrice;
+                                cleaningFees += reservation.CleaningFee;
+                            }
+
+                            <div class="mt-3">
+                                <h6>Price Details</h6>
+                                <ul class="list-unstyled">
+                                    <li>@weekdayNights weekday nights × @reservation.WeekdayPrice.ToString("C")</li>
+                                    <li>@weekendNights weekend nights × @reservation.WeekendPrice.ToString("C")</li>
+                                    <li>Cleaning fee: @reservation.CleaningFee.ToString("C")</li>
+                                    @if (nights >= reservation.Property.MinNightsForDiscount &&
+                                   reservation.Property.DiscountRate.HasValue)
+                                    {
+                                        <li>Discount: @reservation.Property.DiscountRate%</li>
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div class="col-md-4">
+                <div class="card sticky-top" style="top: 20px;">
+                    <div class="card-body">
+                        <h5 class="card-title">Price Summary</h5>
+                        <dl class="row">
+                            <dt class="col-7">Subtotal:</dt>
+                            <dd class="col-5 text-end">@subtotal.ToString("C")</dd>
+
+                            <dt class="col-7">Cleaning Fees:</dt>
+                            <dd class="col-5 text-end">@cleaningFees.ToString("C")</dd>
+
+                            <dt class="col-7">Tax (7%):</dt>
+                            <dd class="col-5 text-end">@((subtotal + cleaningFees) * TAX_RATE).ToString("C")</dd>
+
+                            <dt class="col-7 fw-bold">Total:</dt>
+                            <dd class="col-5 text-end fw-bold">
+                                @((subtotal + cleaningFees) * (1 + TAX_RATE)).ToString("C")
+                            </dd>
+                        </dl>
+
+                        <form asp-action="Checkout" method="post">
+                            <button type="submit" class="btn btn-primary w-100">Confirm Reservations</button>
+                        </form>
+
+                        <div class="mt-3">
+                            <a asp-controller="Property" asp-action="Index" class="btn btn-outline-secondary w-100">
+                                Continue Shopping
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

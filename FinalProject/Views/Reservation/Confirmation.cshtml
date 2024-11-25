@@ -1,0 +1,51 @@
+﻿@* Views/Reservation/Confirmation.cshtml *@
+@model Reservation
+
+@{
+    ViewData["Title"] = "Reservation Confirmed";
+}
+
+<div class="container">
+    <div class="text-center mb-4">
+        <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
+        <h2>Thank You for Your Reservation!</h2>
+        <p class="lead">Confirmation Number: @Model.ConfirmationNumber</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Reservation Details</h5>
+                    <p class="card-text">
+                        <strong>Property:</strong> @Model.Property.PropertyName<br />
+                        <strong>Location:</strong> @Model.Property.City, @Model.Property.State<br />
+                        <strong>Check-in:</strong> @Model.CheckIn.ToShortDateString()<br />
+                        <strong>Check-out:</strong> @Model.CheckOut.ToShortDateString()<br />
+                        <strong>Guests:</strong> @Model.NumOfGuests
+                    </p>
+
+                    <h5 class="mt-4">Price Details</h5>
+                    <dl class="row mb-0">
+                        <dt class="col-6">Stay Price:</dt>
+                        <dd class="col-6 text-end">@((Model.WeekdayPrice + Model.WeekendPrice).ToString("C"))</dd>
+
+                        <dt class="col-6">Cleaning Fee:</dt>
+                        <dd class="col-6 text-end">@Model.CleaningFee.ToString("C")</dd>
+
+                        <dt class="col-6">Tax (7%):</dt>
+                        <dd class="col-6 text-end">@(((Model.WeekdayPrice + Model.WeekendPrice + Model.CleaningFee) * 0.07m).ToString("C"))</dd>
+
+                        <dt class="col-6 border-top pt-2"><strong>Total:</strong></dt>
+                        <dd class="col-6 text-end border-top pt-2"><strong>@(((Model.WeekdayPrice + Model.WeekendPrice + Model.CleaningFee) * 1.07m).ToString("C"))</strong></dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <a asp-controller="Properties" asp-action="Index" class="btn btn-primary">Return to Home</a>
+                <a asp-action="Index" class="btn btn-secondary">View My Reservations</a>
+            </div>
+        </div>
+    </div>
+</div>

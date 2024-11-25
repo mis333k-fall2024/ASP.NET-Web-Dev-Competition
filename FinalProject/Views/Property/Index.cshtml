@@ -1,0 +1,64 @@
+﻿@* Views/Property/Index.cshtml *@
+@model IEnumerable<Property>
+
+@{
+    ViewData["Title"] = "Properties";
+}
+
+<div class="container">
+    <div class="mb-4">
+        <form asp-action="Search" method="get" class="row g-3">
+            <div class="col-md-3">
+                <input type="text" name="location" class="form-control" placeholder="Location" />
+            </div>
+            <div class="col-md-2">
+                <input type="number" name="guests" class="form-control" placeholder="Guests" min="1" />
+            </div>
+            <div class="col-md-2">
+                <select name="categoryId" class="form-select" asp-items="@(new SelectList(ViewBag.Categories, "CategoryID", "CategoryName"))">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary w-100">Search</button>
+            </div>
+            <div class="col-md-2">
+                <a asp-action="AdvancedSearch" class="btn btn-outline-secondary w-100">Advanced Search</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        @foreach (var property in Model)
+        {
+            <div class="col">
+                <div class="card h-100">
+                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Property Image" />
+                    <div class="card-body">
+                        <h5 class="card-title">@property.PropertyName</h5>
+                        <p class="card-text">
+                            <span class="badge bg-secondary">@property.Category.CategoryName</span>
+                            @if (property.Reviews?.Any() == true)
+                            {
+                                <span class="ms-2">
+                                    <i class="bi bi-star-fill text-warning"></i>
+                                    @property.Reviews.Average(r => r.Rating).ToString("F1")
+                                </span>
+                            }
+                        </p>
+                        <p>@property.City, @property.State</p>
+                        <p>@property.WeekdayPrice.ToString("C") / night</p>
+                    </div>
+                    <div class="card-footer">
+                        <a asp-action="Details" asp-route-id="@property.PropertyID"
+                           class="btn btn-primary">View Details</a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mt-4">
+        <p>Showing @Model.Count() of @ViewBag.TotalCount Properties</p>
+    </div>
+</div>

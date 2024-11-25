@@ -1,0 +1,79 @@
+﻿@* Views/Property/AdvancedSearch.cshtml *@
+@{
+    ViewData["Title"] = "Advanced Search";
+}
+
+<div class="container">
+    <h1>Advanced Search</h1>
+
+    <form asp-action="Search" method="get" class="row g-3">
+        <div class="col-md-6">
+            <label class="form-label">Location</label>
+            <input type="text" name="location" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Check In</label>
+            <input type="date" name="checkIn" class="form-control" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Check Out</label>
+            <input type="date" name="checkOut" class="form-control" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Category</label>
+            <select name="categoryId" class="form-select"
+                    asp-items="@(new SelectList(ViewBag.Categories, "CategoryID", "CategoryName"))">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Number of Guests</label>
+            <input type="number" name="guests" class="form-control" min="1" />
+        </div>
+
+        <div class="col-md-4">
+            <label class="form-label">Price Range</label>
+            <div class="input-group">
+                <input type="number" name="minPrice" class="form-control" placeholder="Min" min="0" />
+                <span class="input-group-text">to</span>
+                <input type="number" name="maxPrice" class="form-control" placeholder="Max" min="0" />
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Minimum Bedrooms</label>
+            <input type="number" name="minBedrooms" class="form-control" min="1" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Minimum Bathrooms</label>
+            <input type="number" name="minBathrooms" class="form-control" min="1" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Minimum Rating</label>
+            <input type="number" name="minRating" class="form-control" min="1" max="5" step="0.1" />
+        </div>
+
+        <div class="col-md-3">
+            <label class="form-label">Amenities</label>
+            <div class="form-check">
+                <input type="checkbox" name="petsAllowed" class="form-check-input" value="true" />
+                <label class="form-check-label">Pets Allowed</label>
+            </div>
+            <div class="form-check">
+                <input type="checkbox" name="freeParking" class="form-check-input" value="true" />
+                <label class="form-check-label">Free Parking</label>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Search</button>
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </form>
+</div>
