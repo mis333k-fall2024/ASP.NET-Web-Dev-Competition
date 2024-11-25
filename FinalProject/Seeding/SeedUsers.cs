@@ -26,8 +26,8 @@ namespace FinalProject.Seeding
                         LastName = "User",
                         Address = "123 Main St"
                     },
-                    Password = "Admin123!", // Replace with a strong password
-                    RoleName = "Admin" // Ensure this role exists in your database
+                    Password = "Admin123!", 
+                    RoleName = "Admin" 
                 },
                 new AddUserModel
                 {
@@ -40,8 +40,8 @@ namespace FinalProject.Seeding
                         LastName = "User",
                         Address = "123 Main St",
                     },
-                    Password = "Customer123!", // Replace with a strong password
-                    RoleName = "Customer" // Ensure this role exists in your database
+                    Password = "Customer123!", 
+                    RoleName = "Customer" 
                 }
             };
 

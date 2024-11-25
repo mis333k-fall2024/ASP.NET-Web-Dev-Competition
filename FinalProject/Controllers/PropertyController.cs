@@ -15,7 +15,7 @@ namespace FinalProject.Controllers
             _context = context;
         }
 
-        // GET: /Properties/
+        // GET: /Property/
         public async Task<IActionResult> Index()
         {
             var properties = await _context.Properties
@@ -25,10 +25,13 @@ namespace FinalProject.Controllers
                 .Where(p => p.PropertyStatus && p.AdminApproved)
                 .ToListAsync();
 
+            ViewBag.TotalCount = await _context.Properties.CountAsync();
+            ViewBag.Categories = await _context.Categories.ToListAsync();
+
             return View(properties);
         }
 
-        // GET: /Properties/Details/5
+        // GET: /Property/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -51,11 +54,20 @@ namespace FinalProject.Controllers
             return View(property);
         }
 
-        // GET: /Properties/Search
-        public async Task<IActionResult> Search(string location, DateTime? checkIn,
-            DateTime? checkOut, int? guests, int? categoryId, decimal? minPrice,
-            decimal? maxPrice, int? minBedrooms, int? minBathrooms,
-            decimal? minRating, bool? petsAllowed, bool? freeParking)
+        // GET: /Property/Search
+        public async Task<IActionResult> Search(
+            string location = null,
+            DateTime? checkIn = null,
+            DateTime? checkOut = null,
+            int? guests = null,
+            int? categoryId = null,
+            decimal? minPrice = null,
+            decimal? maxPrice = null,
+            int? minBedrooms = null,
+            int? minBathrooms = null,
+            decimal? minRating = null,
+            bool? petsAllowed = null,
+            bool? freeParking = null)
         {
             var query = _context.Properties
                 .Include(p => p.Category)
@@ -66,10 +78,12 @@ namespace FinalProject.Controllers
             // Apply search filters
             if (!string.IsNullOrEmpty(location))
             {
+                location = location.ToLower().Trim();
                 query = query.Where(p =>
-                    p.City.Contains(location) ||
-                    p.State.Contains(location) ||
-                    p.PropertyName.Contains(location));
+                    p.City.ToLower().Contains(location) ||
+                    p.State.ToLower().Contains(location) ||
+                    (p.City.ToLower() + ", " + p.State.ToLower()).Contains(location) ||
+                    p.PropertyName.ToLower().Contains(location));
             }
 
             if (guests.HasValue)
@@ -122,24 +136,24 @@ namespace FinalProject.Controllers
                      (checkIn <= r.CheckIn && checkOut >= r.CheckOut)))); // Existing reservation within requested dates
             }
 
-            // Get categories for search form
-            ViewBag.Categories = await _context.Categories.ToListAsync();
+            // Apply rating filter if specified
+            if (minRating.HasValue)
+            {
+                query = query.Where(p =>
+                    p.Reviews.Any() &&
+                    p.Reviews.Where(r => !r.DisputeStatus)
+                             .Average(r => (decimal)r.Rating) >= minRating.Value);
+            }
 
             var properties = await query.ToListAsync();
 
-            // Display record count
+            // Populate ViewBag data for the view
             ViewBag.TotalCount = await _context.Properties.CountAsync();
             ViewBag.FilteredCount = properties.Count;
-
-            return View(properties);
-        }
-
-        // GET: /Properties/AdvancedSearch
-        public async Task<IActionResult> AdvancedSearch()
-        {
             ViewBag.Categories = await _context.Categories.ToListAsync();
-            return View();
+
+            // Return the search view with results
+            return View(properties);
         }
     }
 }
-

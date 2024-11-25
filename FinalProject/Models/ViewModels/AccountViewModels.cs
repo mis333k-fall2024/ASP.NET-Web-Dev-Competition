@@ -3,6 +3,50 @@ using System.ComponentModel.DataAnnotations;
 
 namespace FinalProject.Models
 {
+    public class RegisterViewModel
+    {
+        [Required(ErrorMessage = "First name is required.")]
+        [Display(Name = "First Name")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage = "Last name is required.")]
+        [Display(Name = "Last Name")]
+        public string LastName { get; set; }
+
+        [Required]
+        [EmailAddress]
+        [Display(Name = "Email")]
+        public string Email { get; set; }
+
+        [Required(ErrorMessage = "Phone number is required")]
+        [Phone]
+        [Display(Name = "Phone Number")]
+        public string PhoneNumber { get; set; }
+
+        [Required(ErrorMessage = "Address is required")]
+        public string Address { get; set; }
+
+        [Required(ErrorMessage = "Birthday is required")]
+        [DataType(DataType.Date)]
+        [Display(Name = "Birthday")]
+        public DateTime Birthday { get; set; }
+
+        [Required]
+        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [DataType(DataType.Password)]
+        [Display(Name = "Password")]
+        public string Password { get; set; }
+
+        [DataType(DataType.Password)]
+        [Display(Name = "Confirm password")]
+        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
+        public string ConfirmPassword { get; set; }
+
+        [Required]
+        [Display(Name = "Account Type")]
+        public string Role { get; set; }
+    }
+
     public class LoginViewModel
     {
         [Required]
@@ -17,48 +61,6 @@ namespace FinalProject.Models
 
         [Display(Name = "Remember me?")]
         public bool RememberMe { get; set; }
-    }
-
-    public class RegisterViewModel
-    {
-        [Required]
-        [EmailAddress]
-        [Display(Name = "Email")]
-        public string Email { get; set; }
-
-        [Required(ErrorMessage = "First name is required")]
-        [Display(Name = "First Name")]
-        public String FirstName { get; set; }
-
-        [Required(ErrorMessage = "Last name is required")]
-        [Display(Name = "Last Name")]
-        public String LastName { get; set; }
-
-        [Required(ErrorMessage = "Phone number is required")]
-        [Phone]
-        [Display(Name = "Phone Number")]
-        public string PhoneNumber { get; set; }
-
-        [Required(ErrorMessage = "Address is required")]
-        [Display(Name = "Address")]
-        public String Address { get; set; }
-
-        [Required(ErrorMessage = "Birthday is required")]
-        [DataType(DataType.Date)]
-        [Display(Name = "Birthday")]
-        [DisplayFormat(DataFormatString = "{0:MM/dd/yyyy}")]
-        public DateTime Birthday { get; set; }
-
-        [Required]
-        [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 6)]
-        [DataType(DataType.Password)]
-        [Display(Name = "Password")]
-        public string Password { get; set; }
-
-        [DataType(DataType.Password)]
-        [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
-        public string ConfirmPassword { get; set; }
     }
 
     public class ChangePasswordViewModel
@@ -83,13 +85,14 @@ namespace FinalProject.Models
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
-        public String UserName { get; set; }
-        public String Email { get; set; }
-        public String UserID { get; set; }
-        public String FirstName { get; set; }
-        public String LastName { get; set; }
-        public String Address { get; set; }
-        public String PhoneNumber { get; set; }
+        public string UserName { get; set; }
+        public string Email { get; set; }
+        public string UserID { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string PhoneNumber { get; set; }
+        public string Address { get; set; }
         public DateTime Birthday { get; set; }
+        public string Role { get; set; }
     }
 }

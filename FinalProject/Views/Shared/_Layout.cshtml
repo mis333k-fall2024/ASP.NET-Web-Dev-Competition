@@ -14,7 +14,7 @@
     <div>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-controller="Home" asp-action="Index">BevoBnB</a>
+                <a class="navbar-brand" asp-controller="Property" asp-action="Search">BevoBnB</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav-content"
                         aria-controls="nav-content" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -23,9 +23,6 @@
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a asp-controller="Home" asp-action="Index" class="nav-link">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a asp-controller="Property" asp-action="Index" class="nav-link">Properties</a>
                         </li>
                         @if (User.Identity.IsAuthenticated)
                         {

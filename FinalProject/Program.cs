@@ -91,6 +91,6 @@ app.Use(async (context, next) =>
 //third segment of the URL that's a parameter named id.
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Seed}/{action=Index}/{id?}");
+    pattern: "{controller=Property}/{action=Search}/{id?}");
 
 app.Run();

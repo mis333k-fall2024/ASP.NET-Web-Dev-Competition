@@ -5,30 +5,48 @@
 }
 
 <div class="container-fluid">
-    <!-- Search Section -->
-    <div class="mb-4 p-4 bg-light rounded">
-        <form asp-controller="Property" asp-action="Search" method="get" class="row g-3">
-            <div class="col-md-3">
-                <input type="text" name="location" class="form-control" placeholder="Where to?" />
-            </div>
-            <div class="col-md-2">
-                <input type="date" name="checkIn" class="form-control" placeholder="Check-in" />
-            </div>
-            <div class="col-md-2">
-                <input type="date" name="checkOut" class="form-control" placeholder="Check-out" />
-            </div>
-            <div class="col-md-2">
-                <input type="number" name="guests" class="form-control" placeholder="Guests" min="1" />
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-primary w-100">Search</button>
-            </div>
-            <div class="col-md-1">
-                <a asp-controller="Property" asp-action="Search" class="btn btn-outline-secondary w-100">
-                    <i class="bi bi-sliders"></i>
-                </a>
-            </div>
-        </form>
+    <!-- Search Form -->
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <h2 class="h4 mb-3">Search Properties</h2>
+            <form asp-controller="Property" asp-action="Search" method="get">
+                <div class="row g-3">
+                    <!-- Basic Search Fields -->
+                    <div class="col-md-3">
+                        <div class="form-floating">
+                            <input type="text" name="location" class="form-control" id="location" placeholder="Where to?" />
+                            <label for="location">Location</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="date" name="checkIn" class="form-control" id="checkIn" />
+                            <label for="checkIn">Check-in</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="date" name="checkOut" class="form-control" id="checkOut" />
+                            <label for="checkOut">Check-out</label>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="form-floating">
+                            <input type="number" name="guests" class="form-control" id="guests" placeholder="Guests" min="1" />
+                            <label for="guests">Guests</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3 d-flex gap-2">
+                        <button type="submit" class="btn btn-primary flex-grow-1">
+                            <i class="bi bi-search"></i> Search
+                        </button>
+                        <a asp-controller="Property" asp-action="Search" class="btn btn-outline-secondary" title="Advanced Search">
+                            <i class="bi bi-sliders"></i> Filters
+                        </a>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Category Quick Links -->

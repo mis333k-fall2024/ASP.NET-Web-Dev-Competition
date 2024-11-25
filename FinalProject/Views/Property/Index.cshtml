@@ -5,65 +5,132 @@
 }
 
 <div class="container">
-    <!-- Search Bar -->
-    <div class="mb-4 p-4 bg-light rounded">
+    <!-- Hero Search Section -->
+    <div class="mb-4 p-4 bg-light rounded shadow-sm">
+        <h2 class="h4 mb-3">Find your next stay</h2>
         <form asp-action="Search" method="get" class="row g-3">
             <div class="col-md-3">
-                <input type="text" name="location" class="form-control" placeholder="Where to?" />
+                <div class="form-floating">
+                    <input type="text" name="location" class="form-control" id="location" placeholder="Where to?" />
+                    <label for="location">Where to?</label>
+                </div>
             </div>
             <div class="col-md-3">
-                <input type="date" name="checkIn" class="form-control" />
+                <div class="form-floating">
+                    <input type="date" name="checkIn" class="form-control" id="checkIn" />
+                    <label for="checkIn">Check-in</label>
+                </div>
             </div>
             <div class="col-md-3">
-                <input type="date" name="checkOut" class="form-control" />
+                <div class="form-floating">
+                    <input type="date" name="checkOut" class="form-control" id="checkOut" />
+                    <label for="checkOut">Check-out</label>
+                </div>
             </div>
             <div class="col-md-2">
-                <input type="number" name="guests" class="form-control" placeholder="Guests" min="1" />
+                <div class="form-floating">
+                    <input type="number" name="guests" class="form-control" id="guests" placeholder="Guests" min="1" />
+                    <label for="guests">Guests</label>
+                </div>
             </div>
             <div class="col-md-1">
-                <button type="submit" class="btn btn-primary w-100">Search</button>
+                <button type="submit" class="btn btn-primary h-100 w-100">
+                    <i class="bi bi-search"></i>
+                </button>
             </div>
         </form>
     </div>
 
+    <!-- Categories -->
+    @if (ViewBag.Categories != null)
+    {
+        <div class="mb-4">
+            <div class="d-flex gap-2 flex-wrap">
+                <a asp-action="Index" class="btn btn-outline-secondary">All</a>
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <a asp-action="Search" asp-route-categoryId="@category.CategoryID"
+                       class="btn btn-outline-secondary">@category.CategoryName</a>
+                }
+            </div>
+        </div>
+    }
+
     <!-- Property List -->
-    <div class="row">
+    <div class="mb-3">
+        <span class="text-muted">Showing @Model.Count() of @ViewBag.TotalCount Properties</span>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
         @foreach (var property in Model)
         {
-            <div class="col-md-4 mb-4">
-                <div class="card h-100">
-                    <img src="/api/placeholder/400/300" class="card-img-top" alt="Property Image" />
+            <div class="col">
+                <div class="card h-100 shadow-sm">
+                    <img src="/api/placeholder/400/300" class="card-img-top" alt="@property.PropertyName" />
                     <div class="card-body">
                         <h5 class="card-title">@property.PropertyName</h5>
                         <p class="card-text">
                             <i class="bi bi-geo-alt"></i> @property.City, @property.State
                             <br />
                             <span class="badge bg-secondary">@property.Category.CategoryName</span>
-                            @if (property.Reviews?.Any() == true)
-                            {
-                                <span class="ms-2">
-                                    <i class="bi bi-star-fill text-warning"></i>
-                                    @property.Reviews.Where(r => !r.DisputeStatus).Average(r => r.Rating).ToString("F1")
-                                </span>
+                            @{
+                                var validReviews = property.Reviews?.Where(r => !r.DisputeStatus);
+                                if (validReviews?.Any() == true)
+                                {
+                                    var avgRating = validReviews.Average(r => r.Rating);
+                                    <span class="ms-2">
+                                        <i class="bi bi-star-fill text-warning"></i>
+                                        @avgRating.ToString("F1")
+                                    </span>
+                                }
                             }
                         </p>
-                        <ul class="list-unstyled">
-                            <li><i class="bi bi-people"></i> @property.GuestsAllowed guests</li>
-                            <li><i class="bi bi-door-closed"></i> @property.Bedrooms bedrooms</li>
-                            <li><i class="bi bi-water"></i> @property.Bathrooms bathrooms</li>
-                            <li><strong>@property.WeekdayPrice.ToString("C")</strong> / night</li>
+                        <ul class="list-unstyled mb-0">
+                            <li><i class="bi bi-people"></i> Up to @property.GuestsAllowed guests</li>
+                            <li><i class="bi bi-door-closed"></i> @property.Bedrooms @(property.Bedrooms == 1 ? "bedroom" : "bedrooms")</li>
+                            <li><i class="bi bi-water"></i> @property.Bathrooms @(property.Bathrooms == 1 ? "bathroom" : "bathrooms")</li>
+                            <li class="mt-2">
+                                <strong>@property.WeekdayPrice.ToString("C")</strong> /night
+                                @if (property.DiscountRate > 0)
+                                {
+                                    <small class="text-success d-block">
+                                        @property.DiscountRate.Value.ToString("P0") off for @property.MinNightsForDiscount+ nights
+                                    </small>
+                                }
+                            </li>
                         </ul>
                     </div>
-                    <div class="card-footer">
+                    <div class="card-footer bg-transparent">
                         <a asp-action="Details" asp-route-id="@property.PropertyID"
-                           class="btn btn-primary w-100">View Details</a>
+                           class="btn btn-outline-primary w-100">View Details</a>
                     </div>
                 </div>
             </div>
         }
     </div>
 
-    <div class="mt-4">
-        <p>Showing @Model.Count() of @ViewBag.TotalCount Properties</p>
-    </div>
+    @if (!Model.Any())
+    {
+        <div class="text-center my-5">
+            <i class="bi bi-house-x display-1 text-muted"></i>
+            <h3 class="mt-3">No properties found</h3>
+            <p class="text-muted">Try adjusting your search criteria</p>
+        </div>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        // Set minimum date for check-in to today
+        const checkInInput = document.getElementById('checkIn');
+        const checkOutInput = document.getElementById('checkOut');
+        const today = new Date().toISOString().split('T')[0];
+
+        checkInInput.min = today;
+
+        // Update check-out minimum date when check-in is selected
+        checkInInput.addEventListener('change', function() {
+            checkOutInput.min = this.value;
+        });
+    </script>
+}
