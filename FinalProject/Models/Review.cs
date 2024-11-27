@@ -29,6 +29,6 @@ namespace FinalProject.Models
 
         // Dispute Status with required validation
         [Required]
-        public string DisputeStatus { get; set; }
+        public bool DisputeStatus { get; set; }
     }
 }
