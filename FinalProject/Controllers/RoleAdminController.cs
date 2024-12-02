@@ -23,6 +23,8 @@ namespace FinalProject.Controllers
             _roleManager = roleManager;
         }
 
+
+
         // GET: RoleAdmin/Index
         public async Task<IActionResult> Index()
         {
@@ -289,6 +291,43 @@ namespace FinalProject.Controllers
             {
                 ModelState.AddModelError("", error.Description);
             }
+        }
+
+
+        public async Task<IActionResult> Dashboard()
+        {
+            // User Statistics
+            var users = await _userManager.Users.ToListAsync();
+            ViewBag.TotalUsers = users.Count;
+            ViewBag.ActiveUsers = users.Count(u => u.HireStatus ?? false);
+            ViewBag.TotalAdmins = users.Count(u => u.Email.EndsWith("@bevobnb.com"));
+
+            // Quick summary stats
+            ViewBag.PendingProperties = await _context.Properties.CountAsync(p => !p.PropertyStatus);  // false = unapproved
+            ViewBag.DisputedReviews = await _context.Reviews.CountAsync(r => r.DisputeStatus);  // true = disputed
+
+            // Get current month's stats using existing report logic
+            var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
+            var lastDayOfMonth = firstDayOfMonth.AddMonths(1).AddDays(-1);
+
+            var reportQuery = _context.Reservations
+                .Include(r => r.Property)
+                .Where(r => r.ReservationStatus && // true = valid reservation
+                            r.CheckOut >= firstDayOfMonth &&
+                            r.CheckIn <= lastDayOfMonth);
+
+            var reservations = await reportQuery.ToListAsync();
+
+            ViewBag.CurrentMonthRevenue = 0m;
+            ViewBag.CurrentMonthReservations = reservations.Count;
+
+            foreach (var reservation in reservations)
+            {
+                var stayRevenue = reservation.SubTotal - reservation.CleaningFee;
+                ViewBag.CurrentMonthRevenue += stayRevenue * 0.10m; // 10% commission
+            }
+
+            return View();
         }
     }
 }

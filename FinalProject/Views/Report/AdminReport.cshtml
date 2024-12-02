@@ -1,0 +1,66 @@
+﻿@model FinalProject.Models.ReportViewModel
+
+<h2>Administrator Report</h2>
+
+<form asp-action="AdminReport" method="post">
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" type="date" />
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-group">
+                <label asp-for="EndDate" class="control-label"></label>
+                <input asp-for="EndDate" class="form-control" type="date" />
+            </div>
+        </div>
+        <div class="col-md-2 d-flex align-items-end">
+            <button type="submit" class="btn btn-primary">Generate Report</button>
+        </div>
+    </div>
+</form>
+
+<div class="card">
+    <div class="card-header">
+        <h4>BevoBnB Performance Metrics</h4>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-3">
+                <h5>Total Commission</h5>
+                <p>@Model.TotalCommission.ToString("C")</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Total Reservations</h5>
+                <p>@Model.TotalCompletedReservations</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Avg Commission/Reservation</h5>
+                <p>@Model.AverageCommissionPerReservation.ToString("C")</p>
+            </div>
+            <div class="col-md-3">
+                <h5>Total Active Properties</h5>
+                <p>@Model.TotalProperties</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="mb-3">
+    @if (Model.IsAllTime)
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            Showing all-time statistics. Use the date filters above to view specific time periods.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <i class="bi bi-info-circle me-2"></i>
+            Showing statistics from @Model.StartDate?.ToString("MMM d, yyyy") to @Model.EndDate?.ToString("MMM d, yyyy")
+        </div>
+    }
+</div>
