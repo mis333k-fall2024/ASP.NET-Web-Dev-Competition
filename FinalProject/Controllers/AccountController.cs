@@ -61,6 +61,7 @@ namespace FinalProject.Controllers
                 return View(rvm);
             }
 
+            // Create the user
             AppUser newUser = new AppUser
             {
                 UserName = rvm.Email,
@@ -72,28 +73,46 @@ namespace FinalProject.Controllers
                 Birthday = rvm.Birthday
             };
 
-            AddUserModel aum = new AddUserModel()
-            {
-                User = newUser,
-                Password = rvm.Password,
-                RoleName = rvm.Role
-            };
+            IdentityResult userResult = await _userManager.CreateAsync(newUser, rvm.Password);
 
-            IdentityResult result = await AddUser.AddUserWithRoleAsync(aum, _userManager, _context);
-
-            if (result.Succeeded)
+            if (!userResult.Succeeded)
             {
-                await _signInManager.SignInAsync(newUser, isPersistent: false);
-                return RedirectToAction("Index", "Home");
+                foreach (var error in userResult.Errors)
+                {
+                    ModelState.AddModelError("", error.Description);
+                }
+                return View(rvm);
             }
 
-            foreach (IdentityError error in result.Errors)
+            // Check and assign role
+            if (!string.IsNullOrEmpty(rvm.Role))
             {
-                ModelState.AddModelError("", error.Description);
+                var roleExists = await _context.Roles.AnyAsync(r => r.Name == rvm.Role);
+                if (!roleExists)
+                {
+                    _context.Roles.Add(new IdentityRole { Name = rvm.Role });
+                    await _context.SaveChangesAsync();
+                }
+
+                IdentityResult roleResult = await _userManager.AddToRoleAsync(newUser, rvm.Role);
+                if (!roleResult.Succeeded)
+                {
+                    // If role assignment fails, delete the user to maintain consistency
+                    await _userManager.DeleteAsync(newUser);
+
+                    foreach (var error in roleResult.Errors)
+                    {
+                        ModelState.AddModelError("", error.Description);
+                    }
+                    return View(rvm);
+                }
             }
 
-            return View(rvm);
+            // Sign in the user
+            await _signInManager.SignInAsync(newUser, isPersistent: false);
+            return RedirectToAction("Index", "Home");
         }
+
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)

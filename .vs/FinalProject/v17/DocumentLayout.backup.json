@@ -1,9 +1,8 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "E:\\Github\\Group-25\\",
+  "WorkspaceRootPath": "C:\\mis333k\\final\\",
   "Documents": [
     {
-<<<<<<< HEAD
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\account\\register.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
@@ -14,6 +13,14 @@
     {
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\controllers\\accountcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\controllers\\rolehostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\controllers\\rolehostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\views\\account\\hostsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\account\\hostsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\views\\reservation\\create.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
@@ -48,16 +55,8 @@
       "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\rolehost\\viewreviews.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\controllers\\rolehostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\controllers\\rolehostcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\views\\rolehost\\managereservations.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
       "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\rolehost\\managereservations.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\views\\account\\hostsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\account\\hostsummary.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\models\\unavailability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -78,22 +77,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|c:\\mis333k\\final\\finalproject\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\models\\review.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-=======
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|e:\\github\\group-25\\finalproject\\views\\property\\manageproperties.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\views\\property\\manageproperties.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|e:\\github\\group-25\\finalproject\\controllers\\propertycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\controllers\\propertycontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|e:\\github\\group-25\\finalproject\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|e:\\github\\group-25\\finalproject\\models\\property.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{F8FD7FEB-B09B-4A83-AD90-3D54038C0352}|FinalProject\\FinalProject.csproj|solutionrelative:finalproject\\models\\property.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
->>>>>>> 9776cbead51da88e6ac5db324d1ff2afcf999f80
     }
   ],
   "DocumentGroupContainers": [
@@ -102,7 +85,6 @@
       "VerticalTabListWidth": 256,
       "DocumentGroups": [
         {
-<<<<<<< HEAD
           "DockedHeight": 75,
           "SelectedChildIndex": -1,
           "Children": [
@@ -118,64 +100,21 @@
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 11,
               "Title": "Reports.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\Account\\Reports.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\Account\\Reports.cshtml",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Views\\Account\\Reports.cshtml",
               "RelativeToolTip": "FinalProject\\Views\\Account\\Reports.cshtml",
-              "ViewState": "AgIAAAwAAAAAAAAAAAAAABwAAAAAAAAAAAAAAA==",
-=======
-          "DockedHeight": 37,
-          "SelectedChildIndex": 0,
-          "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "ManageProperties.cshtml",
-              "DocumentMoniker": "E:\\Github\\Group-25\\FinalProject\\Views\\Property\\ManageProperties.cshtml",
-              "RelativeDocumentMoniker": "FinalProject\\Views\\Property\\ManageProperties.cshtml",
-              "ToolTip": "E:\\Github\\Group-25\\FinalProject\\Views\\Property\\ManageProperties.cshtml",
-              "RelativeToolTip": "FinalProject\\Views\\Property\\ManageProperties.cshtml",
-              "ViewState": "AgIAADAAAAAAAAAAAAAAAEsAAAAlAAAAAAAAAA==",
->>>>>>> 9776cbead51da88e6ac5db324d1ff2afcf999f80
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAAB4AAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
-              "WhenOpened": "2024-12-08T17:02:56.271Z",
+              "WhenOpened": "2024-12-07T05:37:01.964Z",
               "IsPinned": true,
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "PropertyController.cs",
-              "DocumentMoniker": "E:\\Github\\Group-25\\FinalProject\\Controllers\\PropertyController.cs",
-              "RelativeDocumentMoniker": "FinalProject\\Controllers\\PropertyController.cs",
-              "ToolTip": "E:\\Github\\Group-25\\FinalProject\\Controllers\\PropertyController.cs",
-              "RelativeToolTip": "FinalProject\\Controllers\\PropertyController.cs",
-              "ViewState": "AgIAAEkAAAAAAAAAAAAuwEUBAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T17:03:03.041Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "HomeController.cs",
-              "DocumentMoniker": "E:\\Github\\Group-25\\FinalProject\\Controllers\\HomeController.cs",
-              "RelativeDocumentMoniker": "FinalProject\\Controllers\\HomeController.cs",
-              "ToolTip": "E:\\Github\\Group-25\\FinalProject\\Controllers\\HomeController.cs",
-              "RelativeToolTip": "FinalProject\\Controllers\\HomeController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAYwBUAAAAJAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T17:25:19.642Z",
-              "IsPinned": true,
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-<<<<<<< HEAD
+              "DocumentIndex": 5,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\Reservation\\Create.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\Reservation\\Create.cshtml",
@@ -194,7 +133,7 @@
               "RelativeDocumentMoniker": "FinalProject\\Views\\Account\\Register.cshtml",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Views\\Account\\Register.cshtml",
               "RelativeToolTip": "FinalProject\\Views\\Account\\Register.cshtml",
-              "ViewState": "AgIAAA8AAAAAAAAAAAAAABsAAAArAAAAAAAAAA==",
+              "ViewState": "AgIAADwAAAAAAAAAAAAAAEYAAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-08T16:50:48.11Z",
               "EditorCaption": ""
@@ -207,14 +146,14 @@
               "RelativeDocumentMoniker": "FinalProject\\Models\\ViewModels\\AccountViewModels.cs",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Models\\ViewModels\\AccountViewModels.cs",
               "RelativeToolTip": "FinalProject\\Models\\ViewModels\\AccountViewModels.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAA0AAAAAAAAAAAAkwB0AAAA4AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-08T06:02:33.412Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 10,
               "Title": "EditProperty.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\Property\\EditProperty.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\Property\\EditProperty.cshtml",
@@ -227,7 +166,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 12,
               "Title": "ViewReviews.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\RoleHost\\ViewReviews.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\RoleHost\\ViewReviews.cshtml",
@@ -240,7 +179,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 9,
               "Title": "PropertyController.cs",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Controllers\\PropertyController.cs",
               "RelativeDocumentMoniker": "FinalProject\\Controllers\\PropertyController.cs",
@@ -253,7 +192,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 8,
               "Title": "Create.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\Property\\Create.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\Property\\Create.cshtml",
@@ -266,7 +205,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "ManageReservations.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\RoleHost\\ManageReservations.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\RoleHost\\ManageReservations.cshtml",
@@ -292,20 +231,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 4,
               "Title": "HostSummary.cshtml",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Views\\Account\\HostSummary.cshtml",
               "RelativeDocumentMoniker": "FinalProject\\Views\\Account\\HostSummary.cshtml",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Views\\Account\\HostSummary.cshtml",
               "RelativeToolTip": "FinalProject\\Views\\Account\\HostSummary.cshtml",
-              "ViewState": "AgIAADYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAACoAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
               "WhenOpened": "2024-12-07T06:25:28.443Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 6,
               "Title": "Reservation.cs",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Models\\Reservation.cs",
               "RelativeDocumentMoniker": "FinalProject\\Models\\Reservation.cs",
@@ -350,7 +289,7 @@
               "RelativeDocumentMoniker": "FinalProject\\Controllers\\AccountController.cs",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Controllers\\AccountController.cs",
               "RelativeToolTip": "FinalProject\\Controllers\\AccountController.cs",
-              "ViewState": "AgIAADkAAAAAAAAAAAAAAEEAAAAQAAAAAAAAAA==",
+              "ViewState": "AgIAAEEAAAAAAAAAAAAwwHIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-07T06:05:31.564Z",
               "EditorCaption": ""
@@ -370,13 +309,13 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 3,
               "Title": "RoleHostController.cs",
               "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Controllers\\RoleHostController.cs",
               "RelativeDocumentMoniker": "FinalProject\\Controllers\\RoleHostController.cs",
               "ToolTip": "C:\\mis333k\\final\\FinalProject\\Controllers\\RoleHostController.cs",
               "RelativeToolTip": "FinalProject\\Controllers\\RoleHostController.cs",
-              "ViewState": "AgIAAGoAAAAAAAAAAAAuwIIAAAA6AAAAAAAAAA==",
+              "ViewState": "AgIAAKkAAAAAAAAAAAAkwAsAAAAcAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-07T05:51:20.273Z",
               "EditorCaption": ""
@@ -396,32 +335,134 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-=======
->>>>>>> 9776cbead51da88e6ac5db324d1ff2afcf999f80
+              "DocumentIndex": 7,
               "Title": "Property.cs",
-              "DocumentMoniker": "E:\\Github\\Group-25\\FinalProject\\Models\\Property.cs",
+              "DocumentMoniker": "C:\\mis333k\\final\\FinalProject\\Models\\Property.cs",
               "RelativeDocumentMoniker": "FinalProject\\Models\\Property.cs",
-              "ToolTip": "E:\\Github\\Group-25\\FinalProject\\Models\\Property.cs",
+              "ToolTip": "C:\\mis333k\\final\\FinalProject\\Models\\Property.cs",
               "RelativeToolTip": "FinalProject\\Models\\Property.cs",
-<<<<<<< HEAD
-              "ViewState": "AgIAAD8AAAAAAAAAAAAAAGYAAAAyAAAAAAAAAA==",
-=======
-              "ViewState": "AgIAAEkAAAAAAAAAAAAgwGYAAAAAAAAAAAAAAA==",
->>>>>>> 9776cbead51da88e6ac5db324d1ff2afcf999f80
+              "ViewState": "AgIAAD8AAAAAAAAAAAAAAGUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-08T17:23:53.522Z",
+              "WhenOpened": "2024-12-07T04:53:58.411Z",
               "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:25:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:11:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:4:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:2:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:12:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:18:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:17:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:16:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:14:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:18:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:16:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:15:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{004be353-6879-467c-9d1e-9ac23cdf6d49}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:13:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:10:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:14:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:23:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{34e76e81-ee4a-11d0-ae2e-00a0c90fffc3}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:37:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:39:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:38:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:30:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:33:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:27:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:26:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
             }
           ]
         },
         {
-          "DockedHeight": 628,
+          "DockedHeight": 105,
           "SelectedChildIndex": -1,
           "Children": [
             {
               "$type": "Bookmark",
-              "Name": "ST:0:0:{3ae79031-e1bc-11d0-8f78-00a0c9110057}"
+              "Name": "ST:22:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:20:0:{d212f56b-c48a-434c-a121-1c5d80b59b9f}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:36:0:{e8034f19-ab72-4f06-83fd-f6832b41aa63}"
             }
           ]
         }

@@ -9,6 +9,7 @@ using System.Security.Claims;
 
 namespace FinalProject.Controllers
 {
+    [Authorize(Roles = "Host")]
     public class RoleHostController : Controller
     {
         private readonly AppDbContext _context;

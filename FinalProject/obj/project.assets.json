@@ -4889,19 +4889,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\datly\\.nuget\\packages\\": {}
+    "C:\\Users\\JeksEnterprises\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "E:\\Github\\Group-25\\FinalProject\\FinalProject.csproj",
+      "projectUniqueName": "C:\\mis333k\\final\\FinalProject\\FinalProject.csproj",
       "projectName": "FinalProject",
-      "projectPath": "E:\\Github\\Group-25\\FinalProject\\FinalProject.csproj",
-      "packagesPath": "C:\\Users\\datly\\.nuget\\packages\\",
-      "outputPath": "E:\\Github\\Group-25\\FinalProject\\obj\\",
+      "projectPath": "C:\\mis333k\\final\\FinalProject\\FinalProject.csproj",
+      "packagesPath": "C:\\Users\\JeksEnterprises\\.nuget\\packages\\",
+      "outputPath": "C:\\mis333k\\final\\FinalProject\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\datly\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\JeksEnterprises\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
