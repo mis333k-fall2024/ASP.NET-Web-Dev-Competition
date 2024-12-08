@@ -9,7 +9,6 @@ using System.Security.Claims;
 
 namespace FinalProject.Controllers
 {
-    [Authorize(Roles = "Host")]
     public class RoleHostController : Controller
     {
         private readonly AppDbContext _context;
@@ -26,6 +25,8 @@ namespace FinalProject.Controllers
         {
             return View();
         }
+
+        [Authorize(Roles = "Host")]
         public ActionResult ViewReviews(int hostId)
         {
 
@@ -52,6 +53,7 @@ namespace FinalProject.Controllers
             return View(reviews);
         }
 
+        [Authorize(Roles = "Host")]
         [HttpPost]
         public IActionResult DisputeReview(int reviewId, string reason)
         {
@@ -142,7 +144,7 @@ namespace FinalProject.Controllers
             return RedirectToAction("ManageReservations");
         }
 
-
+        [Authorize(Roles = "Host")]
         [HttpGet]
         public IActionResult UnvDates(int id)
         {
@@ -156,7 +158,7 @@ namespace FinalProject.Controllers
         }
 
 
-
+        [Authorize(Roles = "Host")]
         [HttpPost]
         public IActionResult UnvDates(Unavailability model)
         {
@@ -175,6 +177,7 @@ namespace FinalProject.Controllers
             return RedirectToAction("Reports", "Account"); 
         }
 
+        [Authorize(Roles = "Host")]
         public IActionResult UnvDetails(int id)
         {
             var property = _context.Properties

@@ -41,7 +41,7 @@ namespace FinalProject.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return View(rvm);
             }
 
             // Check if user is at least 18 years old
@@ -112,7 +112,6 @@ namespace FinalProject.Controllers
             await _signInManager.SignInAsync(newUser, isPersistent: false);
             return RedirectToAction("Index", "Home");
         }
-
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)

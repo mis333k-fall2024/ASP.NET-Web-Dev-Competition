@@ -1,45 +1,90 @@
-﻿@* Views/Reservation/Confirmation.cshtml *@
-@model Reservation
+﻿@model IEnumerable<Reservation>
 
 @{
-    ViewData["Title"] = "Reservation Confirmed";
+    ViewData["Title"] = "Reservations Confirmed";
 }
 
 <div class="container">
     <div class="text-center mb-4">
         <i class="bi bi-check-circle text-success" style="font-size: 4rem;"></i>
-        <h2>Thank You for Your Reservation!</h2>
-        <p class="lead">Confirmation Number: @Model.ConfirmationNumber</p>
+        <h2>Thank You for Your Reservations!</h2>
+        <p class="lead">Confirmation Number: @Model.First().ConfirmationNumber</p>
     </div>
 
     <div class="row justify-content-center">
         <div class="col-md-8">
+            @foreach (var reservation in Model)
+            {
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title">Reservation Details</h5>
+                        <p class="card-text">
+                            <strong>Name:</strong> @reservation.Customer.FullName<br />
+                            <strong>Property:</strong> @reservation.Property.PropertyName<br />
+                            <strong>Location:</strong> @reservation.Property.City, @reservation.Property.State<br />
+                            <strong>Check-in:</strong> @reservation.CheckIn.ToShortDateString()<br />
+                            <strong>Check-out:</strong> @reservation.CheckOut.ToShortDateString()<br />
+                            <strong>Guests:</strong> @reservation.NumOfGuests
+                        </p>
+
+                        @{
+                            var nights = (reservation.CheckOut - reservation.CheckIn).Days;
+                            var weekdayNights = Enumerable.Range(0, nights)
+                            .Count(offset => !new[] { DayOfWeek.Friday, DayOfWeek.Saturday }
+                            .Contains(reservation.CheckIn.AddDays(offset).DayOfWeek));
+                            var weekendNights = nights - weekdayNights;
+
+                            decimal stayPrice = (weekdayNights * reservation.WeekdayPrice) +
+                            (weekendNights * reservation.WeekendPrice);
+                            decimal discountAmount = 0;
+
+                            if (nights >= reservation.Property.MinNightsForDiscount)
+                            {
+                                decimal discountRate = reservation.Property.DiscountRate / 100m ?? 0;
+                                discountAmount = stayPrice * discountRate;
+                            }
+
+                            decimal subtotal = stayPrice - discountAmount + reservation.CleaningFee;
+                            decimal tax = subtotal * 0.07m;
+                            decimal total = subtotal + tax;
+                        }
+
+                        <div class="mt-3">
+                            <strong>Individual Price Details</strong>
+                            <ul class="list-unstyled">
+                                <li>@weekdayNights weekday nights × @reservation.WeekdayPrice.ToString("C")</li>
+                                <li>@weekendNights weekend nights × @reservation.WeekendPrice.ToString("C")</li>
+                                <li>Stay Price: @stayPrice.ToString("C")</li>
+                                @if (discountAmount > 0)
+                                {
+                                    <li>Discount: <span style="color: red;">-@discountAmount.ToString("C")</span></li>
+                                }
+                                <li>Cleaning Fee: @reservation.CleaningFee.ToString("C")</li>
+                                <li>Subtotal: @subtotal.ToString("C")</li>
+                                <li>Tax (7%): @tax.ToString("C")</li>
+                                <li><strong>Total: @total.ToString("C")</strong></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">Reservation Details</h5>
-                    <p class="card-text">
-                        <strong>Name:</strong> @Model.Customer.FullName<br />
-                        <strong>Property:</strong> @Model.Property.PropertyName<br />
-                        <strong>Location:</strong> @Model.Property.City, @Model.Property.State<br />
-                        <strong>Check-in:</strong> @Model.CheckIn.ToShortDateString()<br />
-                        <strong>Check-out:</strong> @Model.CheckOut.ToShortDateString()<br />
-                        <strong>Guests:</strong> @Model.NumOfGuests
-                    </p>                        
-
-                    <div class="mt-3">
-                        <strong>Price Details</strong>
-                        <ul class="list-unstyled">
-                            <li>Stay Price: @TempData["Subtotal"]</li>          
-                            @if (TempData["TotalDiscount"] != null)
-                            {
-                                <p>Discount Amount: <span style="color: red;">-@TempData["TotalDiscount"]</span></p>
-                            }
-                            <li>Cleaning fee: @TempData["CleaningFee"]</li>
-                            <li>Tax (7%): @TempData["Tax"]</li>
-                            <hr/>
-                            <li>Grand Total: @TempData["GrandTotal"]</li>
-                        </ul>
-                    </div>
+                    <h5 class="card-title">Overall Price Summary</h5>
+                    <ul class="list-unstyled">
+                        <li>Total Stay Price: @TempData["Subtotal"]</li>
+                        @if (TempData["TotalDiscount"] != null)
+                        {
+                            <li>Total Discount: <span style="color: red;">-@TempData["TotalDiscount"]</span></li>
+                            <li>Price After Discount: @TempData["PriceAfterDis"]</li>
+                        }
+                        <li>Total Cleaning Fees: @TempData["CleaningFee"]</li>
+                        <li>Subtotal: @TempData["SubAfterDis"]</li>
+                        <li>Total Tax (7%): @TempData["Tax"]</li>
+                        <hr />
+                        <li><strong>Grand Total: @TempData["GrandTotal"]</strong></li>
+                    </ul>
                 </div>
             </div>
 

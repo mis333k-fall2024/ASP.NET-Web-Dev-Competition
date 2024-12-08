@@ -21,41 +21,36 @@
 
         <h2 style="text-align: center; font-size: 24px; color: white; margin-bottom: 25px;">Register</h2>
 
+        @if (ViewData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success" style="background-color: #4CAF50; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                @ViewData["SuccessMessage"]
+            </div>
+        }
+
+        @if (!ViewData.ModelState.IsValid)
+        {
+            <div class="alert alert-danger" style="background-color: #f44336; color: white; padding: 10px; border-radius: 5px; margin-bottom: 15px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                    @foreach (var modelState in ViewData.ModelState.Values)
+                    {
+                        foreach (var error in modelState.Errors)
+                        {
+                            <li>@error.ErrorMessage</li>
+                        }
+                    }
+                </ul>
+            </div>
+        }
+
         <form method="post">
-            <div class="form-group">
-                <label asp-for="UserName" class="control-label" style="font-size: 16px; color: white;">Username</label>
-                <input asp-for="UserName"
-                       class="form-control"
-                       style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
-                       placeholder="Enter your username" />
-                <span asp-validation-for="UserName" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="Email" class="control-label" style="font-size: 16px; color: white;">Email</label>
-                <input asp-for="Email"
-                       class="form-control"
-                       style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
-                       placeholder="Enter your email" />
-                <span asp-validation-for="Email" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="PhoneNumber" class="control-label" style="font-size: 16px; color: white;">Phone Number</label>
-                <input asp-for="PhoneNumber"
-                       class="form-control"
-                       style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
-                       placeholder="Enter your Phone Number" />
-                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
-            </div>
-
             <div class="form-group">
                 <label asp-for="FirstName" class="control-label" style="font-size: 16px; color: white;">First Name</label>
                 <input asp-for="FirstName"
                        class="form-control"
                        style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Enter your First Name" />
-                <span asp-validation-for="FirstName" class="text-danger"></span>
+                <span asp-validation-for="FirstName" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
@@ -64,7 +59,25 @@
                        class="form-control"
                        style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Enter your Last Name" />
-                <span asp-validation-for="LastName" class="text-danger"></span>
+                <span asp-validation-for="LastName" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Email" class="control-label" style="font-size: 16px; color: white;">Email</label>
+                <input asp-for="Email"
+                       class="form-control"
+                       style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
+                       placeholder="Enter your email" />
+                <span asp-validation-for="Email" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="PhoneNumber" class="control-label" style="font-size: 16px; color: white;">Phone Number</label>
+                <input asp-for="PhoneNumber"
+                       class="form-control"
+                       style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
+                       placeholder="Enter your Phone Number" />
+                <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
@@ -73,7 +86,7 @@
                        class="form-control"
                        style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Enter your Address" />
-                <span asp-validation-for="Address" class="text-danger"></span>
+                <span asp-validation-for="Address" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
@@ -83,7 +96,7 @@
                        class="form-control"
                        style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Enter your Birthday" />
-                <span asp-validation-for="Birthday" class="text-danger"></span>
+                <span asp-validation-for="Birthday" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
@@ -93,7 +106,7 @@
                        class="form-control"
                        style="margin-bottom: 15px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Enter your password" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <span asp-validation-for="Password" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
@@ -103,19 +116,19 @@
                        class="form-control"
                        style="margin-bottom: 30px; padding: 12px; font-size: 14px; border: none; border-radius: 8px; width: 100%;"
                        placeholder="Confirm your password" />
-                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Role" style="color: white; font-size: 16px;">Account Type</label>
                 <div>
                     <input type="radio" id="Customer" asp-for="Role" value="Customer" />
-                    <label for="Customer" style="margin-right: 15px;">Customer</label>
+                    <label for="Customer" style="margin-right: 15px; color: white;">Customer</label>
 
                     <input type="radio" id="Host" asp-for="Role" value="Host" />
-                    <label for="Host">Host</label>
+                    <label for="Host" style="color: white;">Host</label>
                 </div>
-                <span asp-validation-for="Role" class="text-danger"></span>
+                <span asp-validation-for="Role" class="text-danger" style="font-size: 12px; font-style: italic; color: white !important; display: block;"></span>
             </div>
 
             <button type="submit"

@@ -3,12 +3,15 @@
 
 @{
     ViewData["Title"] = "Shopping Cart";
-    decimal subtotal = 0;
+    decimal stayprice = 0;
+    decimal staydiscounted = 0;
     decimal cleaningFees = 0;
+    decimal subtotal = 0;
     const decimal TAX_RATE = 0.07m;
     decimal tax = 0;
     decimal totaltax = 0;
     decimal totaldiscountamount = 0;
+    decimal reservationsubtotal = 0;
     decimal grandTotal = 0;
 }
 
@@ -63,24 +66,28 @@
                                 .Contains(reservation.CheckIn.AddDays(offset).DayOfWeek));
                                 var weekendNights = nights - weekdayNights;
 
-                                decimal stayPrice = (weekdayNights * reservation.WeekdayPrice) +
+                                decimal reservationStayPrice = (weekdayNights * reservation.WeekdayPrice) +
                                 (weekendNights * reservation.WeekendPrice);
 
                                 if (nights >= reservation.Property.MinNightsForDiscount)
                                 {
                                     decimal discountRate = reservation.Property.DiscountRate ?? 0;
-                                    discountamount = stayPrice * discountRate;
+                                    discountamount = reservationStayPrice * (discountRate / 100m);
                                 }
 
-
-                                subtotal += stayPrice;
-                                cleaningFees += reservation.CleaningFee;
-                                tax = (stayPrice - discountamount + reservation.CleaningFee) * TAX_RATE;
+                                stayprice += reservationStayPrice;
                                 totaldiscountamount += discountamount;
+                                
+                                subtotal += reservationStayPrice;
+                                cleaningFees += reservation.CleaningFee;
+                                staydiscounted = subtotal - totaldiscountamount;
+                                tax = (reservationStayPrice - discountamount + reservation.CleaningFee) * TAX_RATE;
+                                reservationsubtotal = reservationStayPrice - discountamount + reservation.CleaningFee;
+
                                 totaltax += tax;
 
-                                decimal reservationTax = (stayPrice + reservation.CleaningFee) * TAX_RATE;
-                                decimal reservationTotal = stayPrice - discountamount + reservation.CleaningFee + tax;
+                                decimal reservationTax = (reservationStayPrice + reservation.CleaningFee) * TAX_RATE;
+                                decimal reservationTotal = reservationStayPrice - discountamount + reservation.CleaningFee + tax;
                                 grandTotal = subtotal - totaldiscountamount + cleaningFees + totaltax;
                             }
                             
@@ -90,13 +97,16 @@
                                 <ul class="list-unstyled">
                                     <li>@weekdayNights weekday nights × @reservation.WeekdayPrice.ToString("C")</li>
                                     <li>@weekendNights weekend nights × @reservation.WeekendPrice.ToString("C")</li>
+                                    <li>Stay Price: @reservationStayPrice.ToString("C")</li>
                                     <li>Cleaning fee: @reservation.CleaningFee.ToString("C")</li>
-                                    <li>Tax (7%): @tax.ToString("C")</li>
                                     @if (nights >= reservation.Property.MinNightsForDiscount &&
-                                    reservation.Property.DiscountRate.HasValue)
+                                   reservation.Property.DiscountRate.HasValue)
                                     {
                                         <li>Discount: <span style="color: red;">-@discountamount.ToString("C")</span></li>
                                     }
+                                    <li>Subtotal: @reservationsubtotal.ToString("C")</li>
+                                    <li>Tax (7%): @tax.ToString("C")</li>
+
                                     <li><strong>Stay Total:</strong> @reservationTotal.ToString("C")</li>
                                 </ul>
                             </div>
@@ -118,17 +128,23 @@
                     <div class="card-body">
                         <h5 class="card-title">Price Summary</h5>
                         <dl class="row">
-                            <dt class="col-7">Subtotal:</dt>
-                            <dd class="col-5 text-end">@subtotal.ToString("C")</dd>
+                            <dt class="col-7">Stay Price:</dt>
+                            <dd class="col-5 text-end">@stayprice.ToString("C")</dd>
 
                                 @if (totaldiscountamount > 0)
                                 {
                                     <dt class="col-7">Discount Amount:</dt>
                                     <dd class="col-5 text-end" style="color: red;">-@totaldiscountamount.ToString("C")</dd>
+
+                                    <dt class="col-7">Price after discount:</dt>
+                                    <dd class="col-5 text-end">@staydiscounted.ToString("C")</dd>
                                 }
 
                             <dt class="col-7">Cleaning Fees:</dt>
                             <dd class="col-5 text-end">@cleaningFees.ToString("C")</dd>
+
+                                <dt class="col-7">Subtotal:</dt>
+                                <dd class="col-5 text-end">@subtotal.ToString("C")</dd>
 
                             <dt class="col-7">Tax (7%):</dt>
                             <dd class="col-5 text-end">@totaltax.ToString("C")</dd>

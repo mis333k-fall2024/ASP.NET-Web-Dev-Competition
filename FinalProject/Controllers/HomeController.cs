@@ -25,10 +25,14 @@ namespace FinalProject.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.Reviews)
                 .Include(p => p.Host)
-                .Where(p => p.PropertyStatus && p.IsActive) 
+                .Where(p => p.PropertyStatus && p.IsActive)
                 .ToListAsync();
 
+            // Get total count of only approved and active properties
+            ViewBag.TotalCount = await _context.Properties
+                .CountAsync(p => p.PropertyStatus && p.IsActive);
 
+            ViewBag.FilteredCount = properties.Count;
 
             // Get all categories for the search filters
             ViewBag.Categories = await _context.Categories.ToListAsync();
@@ -56,15 +60,20 @@ namespace FinalProject.Controllers
         // GET: /Home/
         public async Task<IActionResult> Search(
             string location = null,
+            string propertyNumber = null,
+            string state = null,
             DateTime? checkIn = null,
             DateTime? checkOut = null,
             int? guests = null,
-            int? categoryId = null,
+            int[] categories = null,
             decimal? minPrice = null,
             decimal? maxPrice = null,
             int? minBedrooms = null,
+            int? maxBedrooms = null,
             int? minBathrooms = null,
+            int? maxBathrooms = null,
             decimal? minRating = null,
+            decimal? maxRating = null,
             bool? petsAllowed = null,
             bool? freeParking = null)
         {
@@ -72,42 +81,32 @@ namespace FinalProject.Controllers
                 .Include(p => p.Category)
                 .Include(p => p.Reviews)
                 .Include(p => p.Host)
-                .Where(p => p.PropertyStatus);
+                .Include(p => p.Reservations)
+                .Include(p => p.UnavailableDates)
+                .Where(p => p.PropertyStatus && p.IsActive); // Only show active and approved properties
 
-
-
-            // Apply search filters function
+            // Apply filters one by one
             if (!string.IsNullOrEmpty(location))
             {
-                var searchTerms = location.ToLower()
-                    .Split(',')
-                    .SelectMany(term => term.Trim().Split(' '))
-                    .Where(term => !string.IsNullOrWhiteSpace(term))
-                    .ToArray();
+                query = ApplyLocationFilter(query, location);
+            }
 
-                // If single search term, use original logic
-                if (searchTerms.Length == 1)
-                {
-                    var singleTerm = searchTerms[0];
-                    query = query.Where(p =>
-                        p.City.ToLower().Contains(singleTerm) ||
-                        p.State.ToLower().Contains(singleTerm) ||
-                        p.Street.ToLower().Contains(singleTerm) ||
-                        p.Zip.Contains(singleTerm)
-                    );
-                }
-                // If multiple terms, check each part separately
-                else
-                {
-                    query = query.Where(p =>
-                        searchTerms.All(term =>
-                            p.Street.ToLower().Contains(term) ||
-                            p.City.ToLower().Contains(term) ||
-                            p.State.ToLower().Contains(term) ||
-                            p.Zip.Contains(term)
-                        )
-                    );
-                }
+            // Property Number filter
+            if (!string.IsNullOrEmpty(propertyNumber))
+            {
+                query = query.Where(p => p.PropertyNumber.ToString().Contains(propertyNumber));
+            }
+
+            // State filter
+            if (!string.IsNullOrEmpty(state))
+            {
+                query = query.Where(p => p.State.ToLower().Contains(state.ToLower()));
+            }
+
+            // Multiple Categories filter
+            if (categories != null && categories.Length > 0)
+            {
+                query = query.Where(p => categories.Contains(p.CategoryID));
             }
 
             if (guests.HasValue)
@@ -115,29 +114,34 @@ namespace FinalProject.Controllers
                 query = query.Where(p => p.GuestsAllowed >= guests.Value);
             }
 
-            if (categoryId.HasValue)
-            {
-                query = query.Where(p => p.Category.CategoryID == categoryId.Value);
-            }
-
             if (minPrice.HasValue)
             {
-                query = query.Where(p => p.WeekdayPrice >= minPrice.Value);
+                query = query.Where(p => p.WeekdayPrice >= minPrice.Value || p.WeekendPrice >= minPrice.Value);
             }
 
             if (maxPrice.HasValue)
             {
-                query = query.Where(p => p.WeekdayPrice <= maxPrice.Value);
+                query = query.Where(p => p.WeekdayPrice <= maxPrice.Value && p.WeekendPrice <= maxPrice.Value);
             }
 
+            // Bedroom range
             if (minBedrooms.HasValue)
             {
                 query = query.Where(p => p.Bedrooms >= minBedrooms.Value);
             }
+            if (maxBedrooms.HasValue)
+            {
+                query = query.Where(p => p.Bedrooms <= maxBedrooms.Value);
+            }
 
+            // Bathroom range
             if (minBathrooms.HasValue)
             {
                 query = query.Where(p => p.Bathrooms >= minBathrooms.Value);
+            }
+            if (maxBathrooms.HasValue)
+            {
+                query = query.Where(p => p.Bathrooms <= maxBathrooms.Value);
             }
 
             if (petsAllowed.HasValue)
@@ -150,36 +154,60 @@ namespace FinalProject.Controllers
                 query = query.Where(p => p.FreeParking == freeParking.Value);
             }
 
-            // Check availability if dates are provided
+            // Handle date availability
             if (checkIn.HasValue && checkOut.HasValue)
             {
-                query = query.Where(p => !p.Reservations.Any(r =>
-                    r.ReservationStatus && // Only consider active reservations
-                    ((checkIn >= r.CheckIn && checkIn < r.CheckOut) || // Check-in during existing reservation
-                     (checkOut > r.CheckIn && checkOut <= r.CheckOut) || // Check-out during existing reservation
-                     (checkIn <= r.CheckIn && checkOut >= r.CheckOut)))); // Existing reservation within requested dates
+                query = query.Where(p =>
+                    // No overlapping reservations
+                    !p.Reservations.Any(r =>
+                        r.ReservationStatus == true &&
+                        (
+                            (checkIn >= r.CheckIn && checkIn < r.CheckOut) ||
+                            (checkOut > r.CheckIn && checkOut <= r.CheckOut) ||
+                            (checkIn <= r.CheckIn && checkOut >= r.CheckOut)
+                        )
+                    ) &&
+                    // No unavailable dates
+                    !p.UnavailableDates.Any(ud =>
+                        ud.Date >= checkIn && ud.Date < checkOut
+                    )
+                );
             }
 
-            // Apply rating filter if specified
-            if (minRating.HasValue)
+            // Apply rating filter with range
+            if (minRating.HasValue || maxRating.HasValue)
             {
                 query = query.Where(p =>
                     p.Reviews.Any() &&
-                    p.Reviews.Where(r => r.DisputeStatus != DisputeStatus.ValidDispute)
-                             .Average(r => (decimal)r.Rating) >= minRating.Value);
+                    (!minRating.HasValue || p.Reviews.Where(r => r.DisputeStatus != DisputeStatus.ValidDispute)
+                                                  .Average(r => (decimal)r.Rating) >= minRating.Value) &&
+                    (!maxRating.HasValue || p.Reviews.Where(r => r.DisputeStatus != DisputeStatus.ValidDispute)
+                                                  .Average(r => (decimal)r.Rating) <= maxRating.Value));
             }
 
             var properties = await query.ToListAsync();
 
-
-
-            // Populate ViewBag data for the view
-            ViewBag.TotalCount = await _context.Properties.CountAsync();
+            // Set ViewBag data for the view
+            ViewBag.TotalCount = await _context.Properties.CountAsync(p => p.PropertyStatus && p.IsActive);
             ViewBag.FilteredCount = properties.Count;
             ViewBag.Categories = await _context.Categories.ToListAsync();
 
-            // Return the search view with results
             return View("Index", properties);
+        }
+
+        private IQueryable<Property> ApplyLocationFilter(IQueryable<Property> query, string location)
+        {
+            var searchTerms = location.ToLower()
+                .Split(new[] { ' ', ',' }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(term => term.Trim())
+                .Where(term => !string.IsNullOrWhiteSpace(term))
+                .ToArray();
+
+            return query.Where(p => searchTerms.All(term =>
+                p.Street.ToLower().Contains(term) ||
+                p.City.ToLower().Contains(term) ||
+                p.State.ToLower().Contains(term) ||
+                p.Zip.Contains(term)));
         }
 
         public IActionResult Privacy()
